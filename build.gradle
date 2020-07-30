@@ -1,0 +1,75 @@
+buildscript {
+    ext.kotlin_version = '1.3.71'
+    ext.dokka_version = '0.10.1'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokka_version}"
+    }
+//    sourceSets {
+//
+//    }
+}
+
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.4.21'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.71'
+    id 'org.jetbrains.dokka' version '0.10.1'
+}
+
+apply plugin: 'idea'
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+apply plugin: "kotlin"
+apply plugin: 'org.jetbrains.dokka'
+
+group 'org.godwin'
+version '1.2-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    version '2020.1'
+    plugins = ['java','Kotlin']
+    intellij.type = 'IC'
+}
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/dokka"
+}
+//patchPluginXml {
+//    changeNotes """
+//      <![CDATA[
+//        <h1>Change Notes</h1>
+//        <h3>Version 1.0</h3>
+//         <ul>
+//            <li>Initial implementation of "KDoc-er" plugin</li>
+//        </ul>
+//        <h3>Version 1.1</h3>
+//        <ul>
+//            <li>Generate/Remove KDoc for whole file</li>
+//            <li>Generate/Remove KDoc for single element such as class, function, variable etc</li>
+//        </ul>
+//        <h3></h3>
+//    ]]>"""
+//}

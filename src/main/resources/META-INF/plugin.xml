@@ -1,0 +1,62 @@
+<idea-plugin>
+    <id>com.godwin.kdocer</id>
+    <name>KDoc-er - Kotlin Doc Generator</name>
+    <version>1.2</version>
+    <vendor email="godwinjoseph.k@gmail.com">Godwin</vendor>
+
+    <description><![CDATA[
+        <h1>KDoc-er</h1>
+        <p>Introducing A simple and lightweight KDoc generator.</p>
+        <p>KDoc is a language used to document the Kotlin codes. And this plugin helps to generate smart KDoc for your project. <br /> This plugin is very lightweight and efficient. for generating KDoc for Kotlin files.</p>
+        <h3>What's New</h3>
+        <h4>Version 1.0</h4>
+        <ul>
+        <li>Support for Kotlin file, Class, function, extension function, and receivers</li>
+        <li>Generate KDoc for all elements in a file</li>
+        <li>Generate KDoc for a single element</li>
+        <li>Remove KDoc for all elements in a file</li>
+        <li>Remove KDoc for a single elements</li>
+        <li>Type /** and tap enter, and the plugin will create KDoc for the particular element</li>
+        <li>Simple access from Generate menu. Tap Alt+ Insert, there is KDocer submenu</li>
+        <li>Also available on Code Format group in Code menu</li>
+        </ul>
+        <p>You can read the <a href="https://kotlinlang.org/docs/reference/kotlin-doc.html">Official document</a> for familiarizing KDoc syntax</p>
+        <p><u><strong>Note</strong></u></p>
+        <p>Now, this plugin <u>will not create</u> KDoc HTML previews and additional files. This plugin is intended only for generating KDoc inside IDE terminal.</p>
+        <p>For generating HTML document you can use the <a href="&quot;https://github.com/Kotlin/dokka">Dokka</a> plugin available at Github.</p>
+        <h4>Install and spread the word :)</h4>
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <h1>Change Notes</h1>
+        <h3>Version 1.0</h3>
+        <ul>
+        <li>Support for Kotlin file, Class, function, extension function, and receivers</li>
+        <li>Generate KDoc for all elements in a file</li>
+        <li>Generate KDoc for a single element</li>
+        <li>Remove KDoc for all elements in a file</li>
+        <li>Remove KDoc for a single elements</li>
+        <li>Type /** and tap enter, and the plugin will create KDoc for the particular element</li>
+        <li>Simple access from Generate menu. Tap Alt+ Insert, there is KDocer submenu</li>
+        <li>Also available on Code Format group in Code menu</li>
+        </ul>
+        <h3></h3>
+    ]]>
+    </change-notes>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <!--  <idea-version since-build="173.0"/>-->
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!--    <depends>com.intellij.modules.platform</depends>-->
+    <depends>com.intellij.modules.java</depends>
+    <depends config-file="withKotlin.xml">org.jetbrains.kotlin</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <enterHandlerDelegate implementation="com.kdocer.EnterAfterKDocGenHandler" order="first"/>
+
+    </extensions>
+
+</idea-plugin>
