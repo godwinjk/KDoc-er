@@ -25,4 +25,6 @@ Now, this plugin will not create KDoc HTML previews and additional files. This p
 
 For generating HTML document you can use the [Dokka](https://github.com/Kotlin/dokka) plugin available at Github.
 
+##### This plugin is available on [Jetbrains plugin repository](https://plugins.jetbrains.com/plugin/14778-kdoc-er--kotlin-doc-generator).
+
 ##### Install and spread the word :)
