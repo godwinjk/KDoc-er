@@ -1,5 +1,7 @@
 # KDoc-er
 
+[Install from plugin store](https://plugins.jetbrains.com/embeddable/install/14778)
+
 Introducing A simple and lightweight KDoc generator.
 
 KDoc is a language used to document the Kotlin codes. And this plugin helps to generate smart KDoc for your project.
