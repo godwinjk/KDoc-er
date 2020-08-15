@@ -1,6 +1,7 @@
 package com.kdocer.generator
 
 import com.intellij.openapi.project.Project
+import com.kdocer.util.Validator
 import org.jetbrains.kotlin.psi.KtFunctionType
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -9,7 +10,7 @@ class NamedFunctionKDocGenerator(private val project: Project, private val eleme
     override fun generate(): String {
 
         val builder = StringBuilder()
-        val nameToPhrase = nameToPhrase(element.name ?: "Function")
+        val nameToPhrase = if (Validator.isNameNeedsSplit()) nameToPhrase(element.name ?: "Function") else element.name
         builder.appendLine("/**")
             .appendLine("* $nameToPhrase")
             .appendLine("*")

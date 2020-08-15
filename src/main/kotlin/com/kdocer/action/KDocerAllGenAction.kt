@@ -1,4 +1,4 @@
-package com.kdocer
+package com.kdocer.action
 
 import com.intellij.codeInsight.CodeInsightSettings
 import com.intellij.openapi.actionSystem.AnAction
@@ -13,12 +13,14 @@ import com.kdocer.generator.ClassKDocGenerator
 import com.kdocer.generator.KDocGenerator
 import com.kdocer.generator.NamedFunctionKDocGenerator
 import com.kdocer.generator.PropertyKDocGenerator
+import com.kdocer.util.Constants
+import com.kdocer.util.NotificationHelper
+import com.kdocer.util.Validator
 import org.jetbrains.kotlin.idea.kdoc.KDocElementFactory
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
-import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 
 /**
@@ -50,32 +52,27 @@ class KDocerAllGenAction : AnAction() {
             psiElements.addAll(
                 when (it) {
                     is KtClass -> {
-                        if (!it.isPrivate()) {
-                            psiElements.add(it)
-                            getClasses(it)
-                        } else {
-                            arrayListOf()
-                        }
+                        psiElements.add(it)
+                        getClasses(it)
                     }
                     is KtNamedFunction -> {
-                        if (!it.isPrivate()) {
-                            psiElements.add(it)
-                            getFunctions(it)
-                        } else {
-                            arrayListOf()
-                        }
+                        psiElements.add(it)
+                        getFunctions(it)
                     }
-//                    is KtProperty -> {
-//                        arrayListOf(it)
-//                    }
+                    is KtProperty -> {
+                        arrayListOf(it)
+                    }
                     else -> arrayListOf()
                 }
             )
         }
 
         psiElements.forEach {
-            processElement(file, it)
+            if (it is KtModifierListOwner && Validator.checkElementIsAllowed(it)) {
+                processElement(file, it)
+            }
         }
+        NotificationHelper.showNotification(Constants.MESSAGE)
     }
 
     private fun processElement(file: KtFile, psiElement: PsiElement) {
@@ -112,23 +109,19 @@ class KDocerAllGenAction : AnAction() {
             elements.addAll(
                 when (it) {
                     is KtClass -> {
-                        if (!it.isPrivate()) {
-                            elements.add(it)
-                            getClasses(it)
-                        } else {
-                            arrayListOf()
-                        }
+
+                        elements.add(it)
+                        getClasses(it)
+
                     }
                     is KtClassBody -> getClasses(it)
                     is KtNamedFunction -> {
-                        if (!it.isPrivate()) {
-                            elements.add(it)
-                            getFunctions(it)
-                        } else {
-                            arrayListOf()
-                        }
+
+                        elements.add(it)
+                        getFunctions(it)
+
                     }
-//                    is KtProperty -> arrayListOf(it)
+                    is KtProperty -> arrayListOf(it)
                     else -> arrayListOf()
                 }
             )
@@ -142,21 +135,13 @@ class KDocerAllGenAction : AnAction() {
         ktNamedFunction.children.forEach {
             elements.addAll(
                 when (it) {
-                    is KtClass -> {
-                        if (!it.isPrivate()) {
-                            elements.add(it)
-                            getClasses(it)
-                        } else {
-                            arrayListOf()
-                        }
+                    is KtClassOrObject -> {
+                        elements.add(it)
+                        getClasses(it)
                     }
                     is KtNamedFunction -> {
-                        if (!it.isPrivate()) {
-                            elements.add(it)
-                            getFunctions(it)
-                        } else {
-                            arrayListOf()
-                        }
+                        elements.add(it)
+                        getFunctions(it)
                     }
                     is KtBlockExpression -> {
                         getClasses(it)
@@ -170,7 +155,7 @@ class KDocerAllGenAction : AnAction() {
 
     private fun getDocGenerator(project: Project, psiElement: PsiElement): KDocGenerator? {
         return when (psiElement) {
-            is KtClass -> {
+            is KtClassOrObject -> {
                 ClassKDocGenerator(project, psiElement)
             }
             is KtNamedFunction -> {

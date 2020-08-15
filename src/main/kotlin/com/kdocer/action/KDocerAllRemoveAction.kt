@@ -1,4 +1,4 @@
-package com.kdocer
+package com.kdocer.action
 
 import com.intellij.codeInsight.CodeInsightSettings
 import com.intellij.openapi.actionSystem.AnAction

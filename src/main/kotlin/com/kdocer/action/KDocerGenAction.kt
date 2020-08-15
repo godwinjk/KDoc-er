@@ -1,4 +1,4 @@
-package com.kdocer
+package com.kdocer.action
 
 import com.intellij.codeInsight.CodeInsightSettings
 import com.intellij.openapi.actionSystem.AnAction
@@ -14,6 +14,8 @@ import com.kdocer.generator.ClassKDocGenerator
 import com.kdocer.generator.KDocGenerator
 import com.kdocer.generator.NamedFunctionKDocGenerator
 import com.kdocer.generator.PropertyKDocGenerator
+import com.kdocer.util.Constants
+import com.kdocer.util.NotificationHelper
 import org.jetbrains.kotlin.idea.kdoc.KDocElementFactory
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.psi.KtClass
@@ -47,6 +49,8 @@ class KDocerGenAction : AnAction() {
         val elementAtCaret = psiFile.findElementAt(caretModel.offset) ?: return
 
         preProcessElement(elementAtCaret)
+
+        NotificationHelper.showNotification(Constants.MESSAGE)
     }
 
     private fun preProcessElement(element: PsiElement) {

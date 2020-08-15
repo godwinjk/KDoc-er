@@ -7,12 +7,10 @@ buildscript {
         jcenter()
     }
     dependencies {
+//        classpath "org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.5.0-SNAPSHOT"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokka_version}"
     }
-//    sourceSets {
-//
-//    }
 }
 
 plugins {
@@ -29,7 +27,7 @@ apply plugin: "kotlin"
 apply plugin: 'org.jetbrains.dokka'
 
 group 'org.godwin'
-version '1.2-SNAPSHOT'
+version '1.4.1'
 
 repositories {
     mavenCentral()
@@ -41,11 +39,17 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version '2020.1'
-    plugins = ['java','Kotlin']
+    updateSinceUntilBuild = false
+    plugins = ['java','Kotlin','android']
     intellij.type = 'IC'
+    sandboxDirectory project.rootDir.canonicalPath + "/.sandbox"
 }
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"

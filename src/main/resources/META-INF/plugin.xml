@@ -1,14 +1,15 @@
 <idea-plugin>
     <id>com.godwin.kdocer</id>
     <name>KDoc-er - Kotlin Doc Generator</name>
-    <version>1.2</version>
+    <version>1.4.1</version>
     <vendor email="godwinjoseph.k@gmail.com">Godwin</vendor>
 
     <description><![CDATA[
         <h1>KDoc-er</h1>
         <p>Introducing A simple and lightweight KDoc generator.</p>
         <p>KDoc is a language used to document the Kotlin codes. And this plugin helps to generate smart KDoc for your project. <br /> This plugin is very lightweight and efficient. for generating KDoc for Kotlin files.</p>
-        <h3>What's New</h3>
+        <h4>Install and spread the word :)</h4>
+        <h2>What's New</h3>
         <h4>Version 1.0</h4>
         <ul>
         <li>Support for Kotlin file, Class, function, extension function, and receivers</li>
@@ -19,12 +20,24 @@
         <li>Type /** and tap enter, and the plugin will create KDoc for the particular element</li>
         <li>Simple access from Generate menu. Tap Alt+ Insert, there is KDocer submenu</li>
         <li>Also available on Code Format group in Code menu</li>
+        <li>Settings page available- open settings and search KDoc-er</li>
+        <li>Custom project level configuration</li>
+        </ul>
+        <h4>Version 1.3</h4>
+        <ul>
+        <li>Configuration page added</li>
+        <li>Field and object support added</li>
+        <li>Resolved bugs</li>
+        </ul>
+        <h4>Version 1.4</h3>
+        <ul>
+        <li>Plugin support added for version greater than 182/2018.2</li>
         </ul>
         <p>You can read the <a href="https://kotlinlang.org/docs/reference/kotlin-doc.html">Official document</a> for familiarizing KDoc syntax</p>
         <p><u><strong>Note</strong></u></p>
         <p>Now, this plugin <u>will not create</u> KDoc HTML previews and additional files. This plugin is intended only for generating KDoc inside IDE terminal.</p>
         <p>For generating HTML document you can use the <a href="&quot;https://github.com/Kotlin/dokka">Dokka</a> plugin available at Github.</p>
-        <h4>Install and spread the word :)</h4>
+
     ]]></description>
 
     <change-notes><![CDATA[
@@ -40,23 +53,91 @@
         <li>Simple access from Generate menu. Tap Alt+ Insert, there is KDocer submenu</li>
         <li>Also available on Code Format group in Code menu</li>
         </ul>
+        <h3>Version 1.3</h3>
+        <ul>
+        <li>Configuration page added</li>
+        <li>Field and object support added</li>
+        <li>Resolved bugs</li>
+        </ul>
+        <h3>Version 1.4</h3>
+        <ul>
+        <li>Plugin support added for version greater than 182/2018.2</li>
+        </ul>
         <h3></h3>
     ]]>
     </change-notes>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <!--  <idea-version since-build="173.0"/>-->
+    <idea-version since-build="182.0"/>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
-    <!--    <depends>com.intellij.modules.platform</depends>-->
+    <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
     <depends config-file="withKotlin.xml">org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <enterHandlerDelegate implementation="com.kdocer.EnterAfterKDocGenHandler" order="first"/>
-
+        <applicationService serviceImplementation="com.kdocer.service.KDecerAppService"/>
+        <applicationService serviceImplementation="com.kdocer.service.KDocerSettings"/>
+        <applicationConfigurable parentId="tools" instance="com.kdocer.service.KDocerConfigurable"
+                                 id="com.kdocer.service.KDocerConfigurable"
+                                 displayName="KDoc-er"/>
+        <enterHandlerDelegate implementation="com.kdocer.EnterAfterKDocGenHandler" order="first"/>
     </extensions>
 
+    <actions>
+        <group id="KDo-cer-format-menu" text="_KDoc-er" description="Generate KDocs" popup="true">
+            <action id="KDo-cer-format-menu-all-add"
+                    class="com.kdocer.action.KDocerAllGenAction"
+                    text="Create KDocs for All Elements"
+                    description="Generate KDocs for all elements in the current Kotlin file.">
+            </action>
+            <action id="KDo-cer-format-menu-add"
+                    class="com.kdocer.action.KDocerGenAction"
+                    text="Create KDoc for Element"
+                    description="Generate KDoc for all elements in the current Kotlin file.">
+            </action>
+            <action id="KDo-cer-format-menu-remove"
+                    class="com.kdocer.action.KDocerRemoveAction"
+                    text="Remove KDoc for Element"
+                    description="Remove KDoc">
+            </action>
+            <action id="KDo-cer-format-menu-all-remove"
+                    class="com.kdocer.action.KDocerAllRemoveAction"
+                    text="Remove KDocs for All Elements"
+                    description="Remove KDocs">
+            </action>
+            <add-to-group group-id="CodeFormatGroup" anchor="last"/>
+            <add-to-group group-id="ProjectViewPopupMenuModifyGroup" anchor="last"/>
+        </group>
+        <group id="KDo-cer-menu" text="_KDoc-er" description="Generate KDocs" popup="true">
+            <action id="KDo-cer-menu-all-add"
+                    class="com.kdocer.action.KDocerAllGenAction"
+                    text="Create KDocs for All Elements"
+                    description="Generate Kdocs for all elements in the current Kotlin file.">
+            </action>
+            <action id="KDo-cer-menu-add"
+                    class="com.kdocer.action.KDocerGenAction"
+                    text="Create KDoc for Element"
+                    description="Generate Kdoc for current element.">
+            </action>
+            <action id="KDo-cer-menu-remove"
+                    class="com.kdocer.action.KDocerRemoveAction"
+                    text="Remove KDoc for Element"
+                    description="Remove KDoc">
+            </action>
+            <action id="KDo-cer-menu-all-remove"
+                    class="com.kdocer.action.KDocerAllRemoveAction"
+                    text="Remove KDocs for All Elements"
+                    description="Remove KDocs">
+            </action>
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <add-to-group group-id="ProjectViewPopupMenuModifyGroup" anchor="last"/>
+        </group>
+    </actions>
+<!--    <extensions defaultExtensionNs="com.intellij">-->
+<!--        <enterHandlerDelegate implementation="com.kdocer.EnterAfterKDocGenHandler" order="first"/>-->
+<!--    </extensions>-->
 </idea-plugin>

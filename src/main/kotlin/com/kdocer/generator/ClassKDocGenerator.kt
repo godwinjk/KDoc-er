@@ -1,8 +1,8 @@
 package com.kdocer.generator
 
 import com.intellij.openapi.project.Project
-import org.jetbrains.kotlin.idea.util.isExpectDeclaration
-import org.jetbrains.kotlin.psi.KtClass
+import com.kdocer.util.Validator
+import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
  * Class k doc generator
@@ -10,14 +10,13 @@ import org.jetbrains.kotlin.psi.KtClass
  * @property project
  * @property element
  * @constructor Create empty Class k doc generator
-
  */
-class ClassKDocGenerator(private val project: Project, private val element: KtClass) :
+internal class ClassKDocGenerator(private val project: Project, private val element: KtClassOrObject) :
     KDocGenerator {
 
     override fun generate(): String {
         val builder = StringBuilder()
-        val name = nameToPhrase(element.name ?: "Class")
+        val name = if (Validator.isNameNeedsSplit()) nameToPhrase(element.name ?: "Class") else element.name
         builder.appendLine("/**")
             .appendLine("* $name")
             .appendLine("*")
@@ -34,16 +33,13 @@ class ClassKDocGenerator(private val project: Project, private val element: KtCl
             builder.appendLine(toParamsKdoc(keyword = "@property", params = properties))
         }
 
+
         if (parameters.isNotEmpty()) {
             builder.appendLine("* @constructor")
                 .appendLine("*")
                 .appendLine(toParamsKdoc(params = parameters))
         } else {
             builder.appendLine("* @constructor Create empty $name")
-                .appendLine(toParamsKdoc(params = parameters))
-        }
-        if (element.isExpectDeclaration()) {
-            builder.appendLine("* @exception")
         }
         builder.appendLine("*/")
         return builder.toString()
