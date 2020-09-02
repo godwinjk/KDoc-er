@@ -29,4 +29,7 @@ For generating HTML document you can use the [Dokka](https://github.com/Kotlin/d
 
 ##### This plugin is available on [Jetbrains plugin repository](https://plugins.jetbrains.com/plugin/14778-kdoc-er--kotlin-doc-generator).
 
+## Contribute?
+All types of contributions are welcome. Please clone and change the code and make a PR.
+
 ##### Install and spread the word :)
