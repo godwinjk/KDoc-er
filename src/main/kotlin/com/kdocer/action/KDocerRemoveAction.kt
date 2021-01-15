@@ -22,6 +22,23 @@ import org.jetbrains.kotlin.psi.KtProperty
  * @since : 2020
  */
 class KDocerRemoveAction : AnAction() {
+
+    override fun update(action: AnActionEvent) {
+        super.update(action)
+        val presentation = action.presentation
+
+        val psiFile = action.getData(PlatformDataKeys.PSI_FILE) ?: return
+        if (psiFile !is KtFile || !CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER) {
+            println("This is not Kotlin file. ")
+
+            presentation.isVisible = false
+            presentation.isEnabled = false
+            return
+        }
+        presentation.isVisible = true
+        presentation.isEnabled = true
+    }
+
     override fun actionPerformed(action: AnActionEvent) {
         val psiFile = action.getData(PlatformDataKeys.PSI_FILE) ?: return
         if (psiFile !is KtFile || !CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER) {

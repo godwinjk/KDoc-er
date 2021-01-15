@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.godwin.kdocer</id>
     <name>KDoc-er - Kotlin Doc Generator</name>
-    <version>1.4.1</version>
+    <version>1.5</version>
     <vendor email="godwinjoseph.k@gmail.com">Godwin</vendor>
 
     <description><![CDATA[
@@ -33,11 +33,14 @@
         <ul>
         <li>Plugin support added for version greater than 182/2018.2</li>
         </ul>
+        <h4>Version 1.5</h3>
+        <ul>
+        <li>Resolved bugs</li>
+        </ul>
         <p>You can read the <a href="https://kotlinlang.org/docs/reference/kotlin-doc.html">Official document</a> for familiarizing KDoc syntax</p>
         <p><u><strong>Note</strong></u></p>
         <p>Now, this plugin <u>will not create</u> KDoc HTML previews and additional files. This plugin is intended only for generating KDoc inside IDE terminal.</p>
         <p>For generating HTML document you can use the <a href="&quot;https://github.com/Kotlin/dokka">Dokka</a> plugin available at Github.</p>
-
     ]]></description>
 
     <change-notes><![CDATA[
@@ -62,6 +65,10 @@
         <h3>Version 1.4</h3>
         <ul>
         <li>Plugin support added for version greater than 182/2018.2</li>
+        </ul>
+        <h4>Version 1.5</h3>
+        <ul>
+        <li>Resolved bugs</li>
         </ul>
         <h3></h3>
     ]]>
@@ -88,28 +95,17 @@
     </extensions>
 
     <actions>
-        <group id="KDo-cer-format-menu" text="_KDoc-er" description="Generate KDocs" popup="true">
+        <group id="KDo-cer-file-menu" text="_KDoc-er" description="Generate KDocs" popup="true">
             <action id="KDo-cer-format-menu-all-add"
                     class="com.kdocer.action.KDocerAllGenAction"
                     text="Create KDocs for All Elements"
                     description="Generate KDocs for all elements in the current Kotlin file.">
-            </action>
-            <action id="KDo-cer-format-menu-add"
-                    class="com.kdocer.action.KDocerGenAction"
-                    text="Create KDoc for Element"
-                    description="Generate KDoc for all elements in the current Kotlin file.">
-            </action>
-            <action id="KDo-cer-format-menu-remove"
-                    class="com.kdocer.action.KDocerRemoveAction"
-                    text="Remove KDoc for Element"
-                    description="Remove KDoc">
             </action>
             <action id="KDo-cer-format-menu-all-remove"
                     class="com.kdocer.action.KDocerAllRemoveAction"
                     text="Remove KDocs for All Elements"
                     description="Remove KDocs">
             </action>
-            <add-to-group group-id="CodeFormatGroup" anchor="last"/>
             <add-to-group group-id="ProjectViewPopupMenuModifyGroup" anchor="last"/>
         </group>
         <group id="KDo-cer-menu" text="_KDoc-er" description="Generate KDocs" popup="true">
@@ -133,8 +129,8 @@
                     text="Remove KDocs for All Elements"
                     description="Remove KDocs">
             </action>
+            <add-to-group group-id="CodeFormatGroup" anchor="last"/>
             <add-to-group group-id="GenerateGroup" anchor="last"/>
-            <add-to-group group-id="ProjectViewPopupMenuModifyGroup" anchor="last"/>
         </group>
     </actions>
 <!--    <extensions defaultExtensionNs="com.intellij">-->

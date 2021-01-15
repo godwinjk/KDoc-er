@@ -30,6 +30,23 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
  * @since : 2020
  */
 class KDocerAllGenAction : AnAction() {
+
+    override fun update(action: AnActionEvent) {
+        super.update(action)
+        val presentation = action.presentation
+
+        val psiFile = action.getData(PlatformDataKeys.PSI_FILE) ?: return
+        if (psiFile !is KtFile || !CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER) {
+            println("This is not Kotlin file. ")
+
+            presentation.isVisible = false
+            presentation.isEnabled = false
+            return
+        }
+        presentation.isVisible = true
+        presentation.isEnabled = true
+    }
+
     override fun actionPerformed(action: AnActionEvent) {
         val psiFile = action.getData(PlatformDataKeys.PSI_FILE) ?: return
         if (psiFile !is KtFile || !CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER) {
@@ -69,13 +86,13 @@ class KDocerAllGenAction : AnAction() {
 
         psiElements.forEach {
             if (it is KtModifierListOwner && Validator.checkElementIsAllowed(it)) {
-                processElement(file, it)
+                processElement(it)
             }
         }
         NotificationHelper.showNotification(Constants.MESSAGE)
     }
 
-    private fun processElement(file: KtFile, psiElement: PsiElement) {
+    private fun processElement(psiElement: PsiElement) {
         val project = psiElement.project
         val generator = getDocGenerator(project, psiElement) ?: return
         val comment = generator.generate()
