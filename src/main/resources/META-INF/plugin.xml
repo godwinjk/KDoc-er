@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.godwin.kdocer</id>
     <name>KDoc-er - Kotlin Doc Generator</name>
-    <version>1.5</version>
+    <version>1.6</version>
     <vendor email="godwinjoseph.k@gmail.com">Godwin</vendor>
 
     <description><![CDATA[
@@ -70,7 +70,10 @@
         <ul>
         <li>Resolved bugs</li>
         </ul>
-        <h3></h3>
+        <h4>Version 1.6</h3>
+        <ul>
+        <li>Included linked types and default values by <a href="https://github.com/Sett17">Sett</a> in <a href="https://github.com/godwinjk/KDoc-er/pull/3">PR3</a></li>
+        </ul>
     ]]>
     </change-notes>
 
