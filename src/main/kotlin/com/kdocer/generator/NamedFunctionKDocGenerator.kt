@@ -29,10 +29,9 @@ class NamedFunctionKDocGenerator(private val project: Project, private val eleme
         }
         element.typeReference?.let {
             if (it.text != "Unit") {
-                builder.appendLine("* @return")
+                builder.appendLine(toReturnKdoc(it.text))
             }
         }
-
 
         builder.appendLine("*/")
         return builder.toString()
