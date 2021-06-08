@@ -39,7 +39,7 @@ internal class ClassKDocGenerator(private val project: Project, private val elem
                 .appendLine("*")
                 .appendLine(toParamsKdoc(params = parameters))
         } else {
-            builder.appendLine("* @constructor Create empty $name")
+            builder.appendLine("* @constructor Create empty [${name?.trim()}]")
         }
         builder.appendLine("*/")
         return builder.toString()

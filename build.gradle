@@ -27,7 +27,7 @@ apply plugin: "kotlin"
 apply plugin: 'org.jetbrains.dokka'
 
 group 'org.godwin'
-version '1.4.1'
+version '1.6'
 
 repositories {
     mavenCentral()
@@ -45,7 +45,7 @@ java {
 }
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2020.1'
+    version '2020.2.4'
     updateSinceUntilBuild = false
     plugins = ['java','Kotlin','android']
     intellij.type = 'IC'

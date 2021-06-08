@@ -20,11 +20,12 @@ class PropertyKDocGenerator(private val project: Project, private val element: K
 //        if (element.valueParameters.isNotEmpty()) {
 //            builder.appendLine(toParamsKdoc(params = element.valueParameters))
 //        }
-//        element.typeReference?.let {
-//            if (it.text != "Unit") {
-//                builder.appendLine("* @return")
-//            }
-//        }
+        element.typeReference?.let {
+            if (it.text != "Unit") {
+                builder.appendLine(toReturnKdoc(it.text))
+            }
+        }
+
         builder.appendLine("*/")
         return builder.toString()
     }
