@@ -22,8 +22,8 @@ interface KDocGenerator {
 
 
     /**
-     * @param name the name
-     * @return the result of converting the name to a phrase
+     * @param name The name
+     * @return The result of converting the name to a phrase
      */
     private fun nameToPhraseAllUpperCase(name: String): String {
         return name.split(UPPER_CASE_CHAR_SPLIT)
@@ -42,7 +42,7 @@ interface KDocGenerator {
 
 /**
  * Converts a String to Title Case
- * @return the String in Title Case
+ * @return The String in Title Case
  */
 private fun String.toTitleCase(): String {
     val sb = StringBuilder()
@@ -54,7 +54,7 @@ private fun String.toTitleCase(): String {
 
 /**
  * Checks whether a String is all uppercase, by iterating through all the characters
- * @return whether the String is all uppercase
+ * @return Whether the String is all uppercase
  */
 private fun String.isAllUpperCase(): Boolean {
     this.forEach {
