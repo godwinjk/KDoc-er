@@ -3,6 +3,9 @@ package com.kdocer.generator
 import com.intellij.psi.PsiNameIdentifierOwner
 import java.util.regex.Pattern
 
+
+val LOWER_CASE_REGEX_SPLIT: Pattern = Pattern.compile("(?<=[a-zA-Z])(?=[A-Z])")
+const val UPPER_CASE_CHAR_SPLIT: Char = '_'
 interface KDocGenerator {
 
     companion object {
@@ -23,7 +26,7 @@ interface KDocGenerator {
      * @return the result of converting the name to a phrase
      */
     private fun nameToPhraseAllUpperCase(name: String): String {
-        return name.split(Pattern.compile("_"))
+        return name.split(UPPER_CASE_CHAR_SPLIT)
             .joinToString(separator = " ") { s: String -> s.toTitleCase() }
     }
 
@@ -31,7 +34,7 @@ interface KDocGenerator {
         if (name.isAllUpperCase()) {
             return nameToPhraseAllUpperCase(name)
         }
-        val array = name.split(Pattern.compile("(?<=[a-zA-Z])(?=[A-Z])"))
+        val array = name.split(LOWER_CASE_REGEX_SPLIT)
         val phrase = array.joinToString(separator = " ") {s: String -> s.toLowerCase()}
         return phrase.capitalize()
     }
