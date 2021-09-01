@@ -32,12 +32,7 @@ interface KDocGenerator {
             return nameToPhraseAllUpperCase(name)
         }
         val array = name.split(Pattern.compile("(?<=[a-zA-Z])(?=[A-Z])"))
-        val builder = StringBuilder()
-        array.forEach {
-            builder.append(it.toLowerCase())
-            builder.append(" ")
-        }
-        val phrase = builder.toString()
+        val phrase = array.joinToString(separator = " ") {s: String -> s.toLowerCase()}
         return phrase.capitalize()
     }
 }
