@@ -79,8 +79,9 @@ class KDocerGenAction : AnAction() {
         } else if (element is PsiWhiteSpace) {
             preProcessElement(element.nextSibling)
         } else {
-            val clazz = PsiTreeUtil.getParentOfType(element, KtClass::class.java)
-            if (clazz != null) processElement(clazz)
+            element.parent?.let {
+                preProcessElement(it)
+            }
         }
     }
 
