@@ -6,11 +6,8 @@ import java.util.regex.Pattern
 
 val LOWER_CASE_REGEX_SPLIT: Pattern = Pattern.compile("(?<=[a-zA-Z])(?=[A-Z])")
 const val UPPER_CASE_CHAR_SPLIT: Char = '_'
+const val LF = "\n"
 interface KDocGenerator {
-
-    companion object {
-        const val LF = "\n"
-    }
 
     fun generate(): String
 
