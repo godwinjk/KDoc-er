@@ -6,7 +6,7 @@ Introducing A simple and lightweight KDoc generator.
 
 KDoc is a language used to document the Kotlin codes. And this plugin helps to generate smart KDoc for your project.
 
-This plugin is very lightweight and efficient. for generating KDoc for Kotlin files.
+This plugin is very lightweight and efficient for generating KDoc for Kotlin files.
 
 ## What's New
 ### Version 1.0
@@ -19,11 +19,11 @@ This plugin is very lightweight and efficient. for generating KDoc for Kotlin fi
 1. Simple access from Generate menu. Tap Alt+ Insert, there is KDocer submenu
 1. Also available on Code Format group in Code menu
 
-You can read the [Official document](https://kotlinlang.org/docs/reference/kotlin-doc.html?_ga=2.241468354.1702203468.1596121268-2080471240.1582196283)t for familiarizing KDoc syntax
+You can read the [Official Documentation](https://kotlinlang.org/docs/reference/kotlin-doc.html?_ga=2.241468354.1702203468.1596121268-2080471240.1582196283) to familiarize yourself with the KDoc syntax
 
 #### Note
 
-Now, this plugin will not create KDoc HTML previews and additional files. This plugin is intended only for generating KDoc inside IDE terminal.
+This plugin will not create KDoc HTML previews and additional files. This plugin is intended only for generating KDoc inside the IDE terminal.
 
 For generating HTML document you can use the [Dokka](https://github.com/Kotlin/dokka) plugin available at Github.
 
