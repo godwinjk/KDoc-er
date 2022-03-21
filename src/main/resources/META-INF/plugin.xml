@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.godwin.kdocer</id>
     <name>KDoc-er - Kotlin Doc Generator</name>
-    <version>1.5</version>
+    <version>1.6</version>
     <vendor email="godwinjoseph.k@gmail.com">Godwin</vendor>
 
     <description><![CDATA[
@@ -10,33 +10,38 @@
         <p>KDoc is a language used to document the Kotlin codes. And this plugin helps to generate smart KDoc for your project. <br /> This plugin is very lightweight and efficient. for generating KDoc for Kotlin files.</p>
         <h4>Install and spread the word :)</h4>
         <h2>What's New</h3>
-        <h4>Version 1.0</h4>
+        <h3>Version 1.6</h3>
         <ul>
-        <li>Support for Kotlin file, Class, function, extension function, and receivers</li>
-        <li>Generate KDoc for all elements in a file</li>
-        <li>Generate KDoc for a single element</li>
-        <li>Remove KDoc for all elements in a file</li>
-        <li>Remove KDoc for a single elements</li>
-        <li>Type /** and tap enter, and the plugin will create KDoc for the particular element</li>
-        <li>Simple access from Generate menu. Tap Alt+ Insert, there is KDocer submenu</li>
-        <li>Also available on Code Format group in Code menu</li>
-        <li>Settings page available- open settings and search KDoc-er</li>
-        <li>Custom project level configuration</li>
+            <li>Underscore separated function name issue fixed</li>
+            <li>Resolved bugs</li>
         </ul>
-        <h4>Version 1.3</h4>
+        <h3>Version 1.5</h3>
         <ul>
-        <li>Configuration page added</li>
-        <li>Field and object support added</li>
-        <li>Resolved bugs</li>
+            <li>Resolved bugs</li>
         </ul>
-        <h4>Version 1.4</h3>
+        <h3>Version 1.4</h3>
         <ul>
-        <li>Plugin support added for version greater than 182/2018.2</li>
+            <li>Plugin support added for version greater than 182/2018.2</li>
         </ul>
-        <h4>Version 1.5</h3>
+        <h3>Version 1.3</h3>
         <ul>
-        <li>Resolved bugs</li>
+            <li>Configuration page added</li>
+            <li>Field and object support added</li>
+            <li>Resolved bugs</li>
         </ul>
+        <h3>Version 1.0</h3>
+        <ul>
+            <li>Support for Kotlin file, Class, function, extension function, and receivers</li>
+            <li>Generate KDoc for all elements in a file</li>
+            <li>Generate KDoc for a single element</li>
+            <li>Remove KDoc for all elements in a file</li>
+            <li>Remove KDoc for a single elements</li>
+            <li>Type /** and tap enter, and the plugin will create KDoc for the particular element</li>
+            <li>Simple access from Generate menu. Tap Alt+ Insert, there is KDocer submenu</li>
+            <li>Also available on Code Format group in Code menu</li>
+        </ul>
+        <h3>
+
         <p>You can read the <a href="https://kotlinlang.org/docs/reference/kotlin-doc.html">Official document</a> for familiarizing KDoc syntax</p>
         <p><u><strong>Note</strong></u></p>
         <p>Now, this plugin <u>will not create</u> KDoc HTML previews and additional files. This plugin is intended only for generating KDoc inside IDE terminal.</p>
@@ -45,32 +50,37 @@
 
     <change-notes><![CDATA[
         <h1>Change Notes</h1>
-        <h3>Version 1.0</h3>
+        <h3>Version 1.6</h3>
         <ul>
-        <li>Support for Kotlin file, Class, function, extension function, and receivers</li>
-        <li>Generate KDoc for all elements in a file</li>
-        <li>Generate KDoc for a single element</li>
-        <li>Remove KDoc for all elements in a file</li>
-        <li>Remove KDoc for a single elements</li>
-        <li>Type /** and tap enter, and the plugin will create KDoc for the particular element</li>
-        <li>Simple access from Generate menu. Tap Alt+ Insert, there is KDocer submenu</li>
-        <li>Also available on Code Format group in Code menu</li>
+            <li>Underscore separated function name issue fixed</li>
+            <li>Resolved bugs</li>
         </ul>
-        <h3>Version 1.3</h3>
+        <h3>Version 1.5</h3>
         <ul>
-        <li>Configuration page added</li>
-        <li>Field and object support added</li>
-        <li>Resolved bugs</li>
+            <li>Resolved bugs</li>
         </ul>
         <h3>Version 1.4</h3>
         <ul>
-        <li>Plugin support added for version greater than 182/2018.2</li>
+            <li>Plugin support added for version greater than 182/2018.2</li>
         </ul>
-        <h4>Version 1.5</h3>
+        <h3>Version 1.3</h3>
         <ul>
-        <li>Resolved bugs</li>
+            <li>Configuration page added</li>
+            <li>Field and object support added</li>
+            <li>Resolved bugs</li>
         </ul>
-        <h3></h3>
+        <h3>Version 1.0</h3>
+        <ul>
+            <li>Support for Kotlin file, Class, function, extension function, and receivers</li>
+            <li>Generate KDoc for all elements in a file</li>
+            <li>Generate KDoc for a single element</li>
+            <li>Remove KDoc for all elements in a file</li>
+            <li>Remove KDoc for a single elements</li>
+            <li>Type /** and tap enter, and the plugin will create KDoc for the particular element</li>
+            <li>Simple access from Generate menu. Tap Alt+ Insert, there is KDocer submenu</li>
+            <li>Also available on Code Format group in Code menu</li>
+        </ul>
+        <h3>
     ]]>
     </change-notes>
 
