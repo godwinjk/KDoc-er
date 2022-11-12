@@ -50,6 +50,10 @@ public class SettingsPanel {
      */
     private JPanel generalOtherPanel;
     /**
+     * The General Other Enable Empty Constructor checkbox.
+     */
+    private JCheckBox generalOtherEmptyConstructor;
+    /**
      * The General other overridden methods checkbox.
      */
     private JCheckBox generalOtherOverriddenMethodsCheckbox;
@@ -85,6 +89,7 @@ public class SettingsPanel {
     private JTextField lblInfo;
     private JLabel lblInfoDonate;
     private JLabel lblInfoRate;
+    private JCheckBox generalOtherEnableEmptyConstructor;
 
     private ConfigCallback callback;
 
@@ -310,6 +315,20 @@ public class SettingsPanel {
     public void setSplittedClassNames(boolean splittedClassNames) {
         generalOtherSplittedClassName.setSelected(splittedClassNames);
     }
+
+    /**
+     * Is allowed empty constructor
+     * @return the boolean
+     */
+    public boolean isAllowedEmptyConstructor() { return generalOtherEmptyConstructor.isSelected(); }
+
+    /**
+     * Sets allowed empty constructor
+     *
+     * @param isAllowed the is allowed
+     */
+    public void setAllowedEmptyConstructor(boolean isAllowed) { generalOtherEmptyConstructor.setSelected(isAllowed); }
+
 
     /**
      * Is allowed class boolean.

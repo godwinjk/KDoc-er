@@ -45,6 +45,8 @@ class KDocerSettings : PersistentStateComponent<KDocerSettings> {
     var lastShowedTime: Long = 0L
     var isDisabledNotification: Boolean = false
 
+    var isAllowedEmptyConstructor: Boolean = true  // for backward compatible behavior
+
     override fun getState(): KDocerSettings? {
         return this
     }

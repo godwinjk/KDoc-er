@@ -1,6 +1,7 @@
 package com.kdocer.generator
 
 import com.intellij.openapi.project.Project
+import com.kdocer.service.KDocerSettings
 import com.kdocer.util.Validator
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
@@ -15,6 +16,7 @@ internal class ClassKDocGenerator(private val project: Project, private val elem
     KDocGenerator {
 
     override fun generate(): String {
+        val settings = KDocerSettings.getInstance()
         val builder = StringBuilder()
         val name = if (Validator.isNameNeedsSplit()) nameToPhrase(element.name ?: "Class") else element.name
         builder.appendLine("/**")
@@ -39,7 +41,9 @@ internal class ClassKDocGenerator(private val project: Project, private val elem
                 .appendLine("*")
                 .appendLine(toParamsKdoc(params = parameters))
         } else {
-            builder.appendLine("* @constructor Create empty $name")
+            if (settings.isAllowedEmptyConstructor) {
+                builder.appendLine("* @constructor Create empty $name")
+            }
         }
         builder.appendLine("*/")
         return builder.toString()
