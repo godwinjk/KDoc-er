@@ -32,7 +32,8 @@ class KDocerConfigurable : Configurable {
                 settings.isSplittedClassNames != componet.isSplittedClassNames ||
                 settings.isAllowedKeepDoc != componet.isAllowedKeepDoc ||
                 settings.isAllowedReplaceDoc != componet.isAllowedReplaceDoc ||
-                settings.isDisabledNotification != componet.isDisabledNotification
+                settings.isDisabledNotification != componet.isDisabledNotification ||
+                settings.isAllowedEmptyConstructor != componet.isAllowedEmptyConstructor
     }
 
     override fun getDisplayName(): String {
@@ -54,6 +55,7 @@ class KDocerConfigurable : Configurable {
         settings.isAllowedKeepDoc = componet.isAllowedKeepDoc
         settings.isAllowedReplaceDoc = componet.isAllowedReplaceDoc
         settings.isDisabledNotification = componet.isDisabledNotification
+        settings.isAllowedEmptyConstructor = componet.isAllowedEmptyConstructor
 
 //        if (settings.isDisabledNotification) {
 //            settings.lastShowedTime = time
@@ -77,6 +79,7 @@ class KDocerConfigurable : Configurable {
         componet.isAllowedKeepDoc = settings.isAllowedKeepDoc
         componet.isAllowedReplaceDoc = settings.isAllowedReplaceDoc
         componet.isDisabledNotification = settings.isDisabledNotification
+        componet.isAllowedEmptyConstructor = settings.isAllowedEmptyConstructor
 
 //        if (settings.isDisabledNotification) {
 //            val lastDisabledTime = settings.lastShowedTime
