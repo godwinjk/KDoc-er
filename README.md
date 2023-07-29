@@ -1,4 +1,6 @@
 # KDoc-er
+[![Version](https://img.shields.io/jetbrains/plugin/v/14778-kdoc-er--kotlin-doc-generator.svg)](https://plugins.jetbrains.com/plugin/14778-kdoc-er--kotlin-doc-generator)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/14778-kdoc-er--kotlin-doc-generator.svg)](https://plugins.jetbrains.com/plugin/14778-kdoc-er--kotlin-doc-generator)
 
 [Install from plugin store](https://plugins.jetbrains.com/embeddable/install/14778)
 
