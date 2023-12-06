@@ -68,7 +68,7 @@ class EnterAfterKDocGenHandler : EnterHandlerDelegateAdapter() {
                         .let { CodeStyleManager.getInstance(project).reformat(it) }
                 }?.let {
                     it.getChildOfType<KDocSection>()?.let {
-                        caretModel.moveToOffset(it.textOffset + 6)
+                        caretModel.moveToOffset(it.textOffset + 1) // Move caret onto the first line
                     }
                 }
         }

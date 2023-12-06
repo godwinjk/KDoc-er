@@ -7,10 +7,15 @@ import org.jetbrains.kotlin.psi.KtProperty
 class PropertyKDocGenerator(private val project: Project, private val element: KtProperty) :
     KDocGenerator {
     override fun generate(): String {
+        val isAppendName = Validator.isAppendName()
+
+        // Return an empty KDoc, if applicable
+        val isEmpty = !isAppendName
+        if (isEmpty)
+            return "/**\n *\n */\n"
 
         val builder = StringBuilder()
         val nameToPhrase = if (Validator.isNameNeedsSplit()) nameToPhrase(element.name ?: "Property") else element.name
-        val isAppendName = Validator.isAppendName()
         builder.appendLine("/**")
             .append("* ").apply { if (isAppendName) append(nameToPhrase) }.appendLine()
 //            .appendLine("*")
