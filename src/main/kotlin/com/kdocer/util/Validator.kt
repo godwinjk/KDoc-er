@@ -63,4 +63,9 @@ object Validator {
         val settings = KDocerSettings.getInstance()
         return settings.isSplittedClassNames
     }
+
+    fun isAppendName(): Boolean {
+        val settings = KDocerSettings.getInstance()
+        return settings.isAppendName
+    }
 }

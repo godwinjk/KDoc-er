@@ -58,6 +58,10 @@ public class SettingsPanel {
      */
     private JCheckBox generalOtherSplittedClassName;
     /**
+     * The General other append name.
+     */
+    private JCheckBox generalOtherAppendName;
+    /**
      * The General panel.
      */
     private JPanel generalPanel;
@@ -291,6 +295,24 @@ public class SettingsPanel {
      */
     public void setAllowedReplaceDoc(boolean allowedReplaceDoc) {
         generalModeKeepRadioButton.setSelected(allowedReplaceDoc);
+    }
+
+    /**
+     * Is append name boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isAppendName() {
+        return generalOtherAppendName.isSelected();
+    }
+
+    /**
+     * Sets append name.
+     *
+     * @param appendName the append name
+     */
+    public void setAppendName(boolean appendName) {
+        generalOtherAppendName.setSelected(appendName);
     }
 
     /**

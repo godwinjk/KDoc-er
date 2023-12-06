@@ -11,8 +11,9 @@ class NamedFunctionKDocGenerator(private val project: Project, private val eleme
 
         val builder = StringBuilder()
         val nameToPhrase = if (Validator.isNameNeedsSplit()) nameToPhrase(element.name ?: "Function") else element.name
+        val isAppendName = Validator.isAppendName()
         builder.appendLine("/**")
-            .appendLine("* $nameToPhrase")
+            .append("* ").apply { if (isAppendName) append(nameToPhrase) }.appendLine()
             .appendLine("*")
 
         if (element.typeParameters.isNotEmpty()) {

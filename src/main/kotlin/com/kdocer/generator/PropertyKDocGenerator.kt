@@ -10,8 +10,9 @@ class PropertyKDocGenerator(private val project: Project, private val element: K
 
         val builder = StringBuilder()
         val nameToPhrase = if (Validator.isNameNeedsSplit()) nameToPhrase(element.name ?: "Property") else element.name
+        val isAppendName = Validator.isAppendName()
         builder.appendLine("/**")
-            .appendLine("* $nameToPhrase")
+            .append("* ").apply { if (isAppendName) append(nameToPhrase) }.appendLine()
 //            .appendLine("*")
 
 //        if (element.typeParameters.isNotEmpty()) {
