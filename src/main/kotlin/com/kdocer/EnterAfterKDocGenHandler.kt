@@ -6,6 +6,7 @@ import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.codeStyle.CodeStyleManager
@@ -67,8 +68,24 @@ class EnterAfterKDocGenHandler : EnterHandlerDelegateAdapter() {
                         .let { kdoc.replace(it) }
                         .let { CodeStyleManager.getInstance(project).reformat(it) }
                 }?.let {
-                    it.getChildOfType<KDocSection>()?.let {
-                        caretModel.moveToOffset(it.textOffset + 1) // Move caret onto the first line
+                    it.getChildOfType<KDocSection>()?.let { kdoc ->
+                        val document = editor.document
+                        val kdocStartOffset = kdoc.textOffset
+
+                        // Check if the first line of KDoc is empty (only contains *)
+                        val lineStartOffset = document.getLineStartOffset(document.getLineNumber(kdocStartOffset))
+                        var lineEndOffset = document.getLineEndOffset(document.getLineNumber(kdocStartOffset))
+                        val lineText = document.getText(TextRange(lineStartOffset, lineEndOffset))
+
+                        if (lineText.trimStart() == "*") {
+                            // Insert a space after the asterisk
+                            val spaceInsertOffset = lineStartOffset + lineText.indexOf("*") + 1
+                            document.insertString(spaceInsertOffset, " ")
+                            lineEndOffset++
+                        }
+
+                        // Move the caret after the inserted space
+                        caretModel.moveToOffset(lineEndOffset)
                     }
                 }
         }
