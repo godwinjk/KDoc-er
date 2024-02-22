@@ -15,7 +15,7 @@ interface KDocGenerator {
         params.map { "$keyword ${it.name}" }
             .joinToString(LF, transform = { "* $it" })
 
-    fun StringBuilder.appendLine(text: String): StringBuilder = append(text).append(LF)
+    fun StringBuilder.appendLine(text: String = ""): StringBuilder = append(text).append(LF)
 
 
     /**

@@ -8,11 +8,18 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 class NamedFunctionKDocGenerator(private val project: Project, private val element: KtNamedFunction) :
     KDocGenerator {
     override fun generate(): String {
+        val isAppendName = Validator.isAppendName()
+
+        // Return an empty KDoc, if applicable
+        val isEmpty = !isAppendName && element.typeParameters.isEmpty() && element.valueParameters.isEmpty()
+                && (element.typeReference?.text ?: "Unit") == "Unit"
+        if (isEmpty)
+            return "/**\n * \n */\n"
 
         val builder = StringBuilder()
         val nameToPhrase = if (Validator.isNameNeedsSplit()) nameToPhrase(element.name ?: "Function") else element.name
         builder.appendLine("/**")
-            .appendLine("* $nameToPhrase")
+            .append("* ").apply { if (isAppendName) append(nameToPhrase) }.appendLine()
             .appendLine("*")
 
         if (element.typeParameters.isNotEmpty()) {

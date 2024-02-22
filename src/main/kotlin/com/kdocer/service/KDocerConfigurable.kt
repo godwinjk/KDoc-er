@@ -30,6 +30,7 @@ class KDocerConfigurable : Configurable {
                 settings.isAllowedField != componet.isAllowedField ||
                 settings.isAllowedFun != componet.isAllowedFun ||
                 settings.isSplittedClassNames != componet.isSplittedClassNames ||
+                settings.isAppendName != componet.isAppendName ||
                 settings.isAllowedKeepDoc != componet.isAllowedKeepDoc ||
                 settings.isAllowedReplaceDoc != componet.isAllowedReplaceDoc ||
                 settings.isDisabledNotification != componet.isDisabledNotification
@@ -51,6 +52,7 @@ class KDocerConfigurable : Configurable {
         settings.isAllowedField = componet.isAllowedField
         settings.isAllowedFun = componet.isAllowedFun
         settings.isSplittedClassNames = componet.isSplittedClassNames
+        settings.isAppendName = componet.isAppendName
         settings.isAllowedKeepDoc = componet.isAllowedKeepDoc
         settings.isAllowedReplaceDoc = componet.isAllowedReplaceDoc
         settings.isDisabledNotification = componet.isDisabledNotification
@@ -74,6 +76,7 @@ class KDocerConfigurable : Configurable {
         componet.isAllowedField = settings.isAllowedField
         componet.isAllowedFun = settings.isAllowedFun
         componet.isSplittedClassNames = settings.isSplittedClassNames
+        componet.isAppendName = settings.isAppendName
         componet.isAllowedKeepDoc = settings.isAllowedKeepDoc
         componet.isAllowedReplaceDoc = settings.isAllowedReplaceDoc
         componet.isDisabledNotification = settings.isDisabledNotification

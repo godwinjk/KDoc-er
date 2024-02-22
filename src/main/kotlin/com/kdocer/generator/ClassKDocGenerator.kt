@@ -17,8 +17,9 @@ internal class ClassKDocGenerator(private val project: Project, private val elem
     override fun generate(): String {
         val builder = StringBuilder()
         val name = if (Validator.isNameNeedsSplit()) nameToPhrase(element.name ?: "Class") else element.name
+        val isAppendName = Validator.isAppendName()
         builder.appendLine("/**")
-            .appendLine("* $name")
+            .append("* ").apply { if (isAppendName) append(name) }.appendLine()
             .appendLine("*")
 
         if (element.typeParameters.isNotEmpty()) {

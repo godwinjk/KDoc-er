@@ -37,6 +37,7 @@ class KDocerSettings : PersistentStateComponent<KDocerSettings> {
 
     var isAllowedOverride: Boolean = false
     var isSplittedClassNames: Boolean = true
+    var isAppendName: Boolean = true
 
     var isAllowedClass: Boolean = true
     var isAllowedFun: Boolean = true
