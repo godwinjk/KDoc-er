@@ -7,6 +7,10 @@
     <depends>com.intellij.modules.platform</depends>
     <depends config-file="withKotlin.xml">org.jetbrains.kotlin</depends>
 
+    <extensions defaultExtensionNs="org.jetbrains.kotlin">
+        <supportsKotlinPluginMode supportsK2="true"/>
+    </extensions>
+
     <extensions defaultExtensionNs="com.intellij">
         <enterHandlerDelegate implementation="com.kdocer.EnterAfterKDocGenHandler" order="first"/>
         <applicationService serviceImplementation="com.kdocer.service.KDecerAppService"/>

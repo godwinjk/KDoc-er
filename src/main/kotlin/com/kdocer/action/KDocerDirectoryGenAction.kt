@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.application.ReadAction
+import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task
@@ -54,9 +54,9 @@ class KDocerDirectoryGenAction : AnAction() {
                     indicator.text = file.name
 
                     // Read action (off-EDT): resolve PSI + generate/merge text (type inference here).
-                    val edits = ReadAction.compute<List<Pair<KtDeclaration, String>>, RuntimeException> {
+                    val edits = runReadAction<List<Pair<KtDeclaration, String>>> {
                         val ktFile = PsiManager.getInstance(project).findFile(file) as? KtFile
-                            ?: return@compute emptyList()
+                            ?: return@runReadAction emptyList()
                         KDocGenerationSupport.collectTargets(ktFile)
                             .mapNotNull { d -> KDocGenerationSupport.computeText(project, d, policy)?.let { d to it } }
                     }

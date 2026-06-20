@@ -484,7 +484,7 @@ templates:
 <!-- Plugin description end -->
 ## Requirements
 
-- IntelliJ IDEA 2024.1 or later (any edition)
+- IntelliJ IDEA 2025.1 or later (any edition)
 - Kotlin plugin installed
 
 ## Installation
@@ -495,9 +495,33 @@ templates:
 
 Or install directly: [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/14778-kdoc-er--kotlin-doc-generator)
 
+## Author
+
+<a href="https://github.com/godwinjk">
+  <img src="https://github.com/godwinjk.png" width="80" height="80" style="border-radius:50%;" alt="godwinjk"/>
+  <br/>
+  <sub><b>Godwin Joseph</b></sub>
+</a>
+
+## Contributors
+
+<a href="https://github.com/isaacy2012">
+  <img src="https://github.com/isaacy2012.png" width="60" height="60" style="border-radius:50%;" alt="isaacy2012"/>
+</a>
+&nbsp;
+<a href="https://github.com/CJCrafter">
+  <img src="https://github.com/CJCrafter.png" width="60" height="60" style="border-radius:50%;" alt="CJCrafter"/>
+</a>
+
 ## Contributing
 
-All types of contributions are welcome. Clone the repository, make your changes, and open a pull request.
+All contributions are welcome — whether it's a bug fix, a new feature, a typo correction, or even a comment improving code readability. No contribution is too small.
+
+1. Fork the repository
+2. Create your branch (`git checkout -b my-change`)
+3. Make your changes
+4. Run `./gradlew build` to make sure everything compiles and tests pass
+5. Open a pull request
 
 ```bash
 # Build the plugin
@@ -510,8 +534,10 @@ All types of contributions are welcome. Clone the repository, make your changes,
 ./gradlew test
 ```
 
-## Links
+## Donate
 
-- [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/14778-kdoc-er--kotlin-doc-generator)
-- [KDoc Reference](https://kotlinlang.org/docs/kotlin-doc.html)
-- [Dokka](https://github.com/Kotlin/dokka) — for generating HTML documentation from KDoc
+If you find KDoc-er useful, consider supporting its development:
+
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/godwinj)
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S0176OVQ)
