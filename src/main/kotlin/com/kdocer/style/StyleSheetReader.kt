@@ -68,6 +68,10 @@ object StyleSheetReader {
             usageExample = style["usageExample"] as? Boolean,
             includeConstructor = style["includeConstructor"] as? Boolean,
             existingKDocPolicy = existingKDocPolicy,
+            throwsDetection = style["throwsDetection"] as? Boolean,
+            sinceTag = style["sinceTag"] as? Boolean,
+            sinceVersion = style["sinceVersion"] as? String,
+            seeReferences = style["seeReferences"] as? Boolean,
         )
     }
 }

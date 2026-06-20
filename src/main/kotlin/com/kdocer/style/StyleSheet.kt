@@ -25,4 +25,9 @@ data class StyleSheet(
     val usageExample: Boolean? = null,
     val includeConstructor: Boolean? = null,
     val existingKDocPolicy: ExistingKDocPolicy? = null,
+
+    val throwsDetection: Boolean? = null,
+    val sinceTag: Boolean? = null,
+    val sinceVersion: String? = null,
+    val seeReferences: Boolean? = null,
 )

@@ -11,6 +11,10 @@
 #  usageExample: false         # append a fenced sample call to function KDocs, e.g. `val user = getUser()`
 #  includeConstructor: true    # emit the @constructor line for classes
 #  existingKDoc: merge         # what to do when a KDoc already exists: merge | keep | replace
+#  throwsDetection: true       # scan function bodies for throw expressions and emit @throws tags
+#  sinceTag: false             # stamp generated KDocs with a @since version tag
+#  sinceVersion: ""            # version string for @since, e.g. "1.0.0" or "2024.1"
+#  seeReferences: false        # add @see links (overrides → super method, sealed subtypes → parent)
 #  verbMapping:                # extend/override the verb -> phrase map ({noun} = the rest of the name)
 #    fetch: "Fetches the {noun} from the remote source"
 #    sync: "Synchronises the {noun}"

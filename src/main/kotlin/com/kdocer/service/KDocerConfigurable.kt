@@ -69,6 +69,31 @@ class KDocerConfigurable : BoundConfigurable(Constants.SETTINGS_DISP_NAME) {
             }
         }
 
+        group("@throws Detection") {
+            row {
+                checkBox("Scan function bodies for <code>throw</code> expressions and emit <code>@throws</code> tags")
+                    .bindSelected(settings::isThrowsDetection)
+            }
+        }
+
+        group("@since Tag") {
+            row {
+                checkBox("Stamp generated KDocs with a <code>@since</code> version tag")
+                    .bindSelected(settings::isSinceTag)
+            }
+            row("Version:") {
+                textField().bindText(settings::sinceVersion).columns(COLUMNS_LARGE)
+                    .comment("e.g. <code>1.0.0</code> or <code>2024.1</code>. Also configurable via <code>sinceVersion</code> in <code>.kdocer.yaml</code>.")
+            }
+        }
+
+        group("@see Cross-References") {
+            row {
+                checkBox("Add <code>@see</code> links (overrides → super method, sealed subtypes → parent)")
+                    .bindSelected(settings::isSeeReferences)
+            }
+        }
+
         group("Usage Example") {
             row {
                 checkBox("Append a usage example to function KDocs (e.g. <code>val user = getUser()</code>)")

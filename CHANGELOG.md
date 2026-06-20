@@ -1,11 +1,13 @@
 # KDoc-er Changelog
 
-## [Unreleased]
-
 ## [2026.1.1]
 
 ### Added
 
+- **`@throws` detection** — scans function bodies for `throw` expressions and emits `@throws` tags with the exception type. Enabled by default.
+- **`@since` version stamp** — appends `@since <version>` to every generated KDoc. Configure the version string per project via settings or `sinceVersion` in `.kdocer.yaml`. Disabled by default.
+- **`@see` cross-references** — links override methods to their super declaration (`@see SuperClass.method`), sealed subtypes to the parent sealed type, and object singletons to their implemented interface/superclass. Disabled by default; enable via settings or `seeReferences: true` in `.kdocer.yaml`.
+- **Two inspection levels** — "Missing KDoc comment (suggestion)" (enabled by default, Alt+Enter only) and "Missing KDoc comment (warning)" (disabled by default, subtle underline). Both offer a quick-fix to generate the KDoc.
 - **Non-destructive merge** — existing KDocs are preserved by default. New three-way policy: Merge (keeps your text, adds missing tags), Keep (leave untouched), or Replace (regenerate). Default is Merge.
 - **Inferred return types** — expression-body functions (`fun f() = …`) now resolve the return type via the K2 Analysis API and emit a meaningful `@return` tag.
 - **Smart `@return` descriptions** — return tags now carry type-derived text (e.g. `@return the user`, `@return the users`, `@return \`true\` if the condition holds`) instead of being empty.
@@ -27,6 +29,7 @@
 - Consolidated two settings pages (Configuration + Templates & AI) into one clean page.
 - Remove actions (single + all) fully rewritten and working correctly.
 - Generate actions no longer gate on `SMART_INDENT_ON_ENTER`.
+- Removed `com.intellij.modules.java` dependency — plugin now works on any JetBrains IDE with the Kotlin plugin, not just Java-capable IDEs.
 
 ### Removed
 

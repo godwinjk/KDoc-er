@@ -29,6 +29,11 @@ class PropertyKDocGenerator(private val project: Project, private val element: K
         aspects.notes.forEach { builder.appendLine("* $it") }
         aspects.tags.forEach { builder.appendLine("* $it") }
 
+        // @since version stamp.
+        if (style.sinceTag && style.sinceVersion.isNotBlank()) {
+            builder.appendLine("* @since ${style.sinceVersion}")
+        }
+
         builder.appendLine("*/")
         return builder.toString()
     }

@@ -24,6 +24,9 @@ Customise everything per project via a `.kdocer.yaml` style sheet, or use the se
 - **Smart `@return` descriptions** — type-derived text like `@return the user`, `@return the users` (collections), or `` @return `true` if the condition holds `` (booleans).
 - **Coroutine & stream awareness** — `suspend` functions and `Flow`/`StateFlow`/`SharedFlow`/`Deferred`/`Channel` return types are documented automatically.
 - **Framework detection** — recognises Jetpack Compose, `ViewModel`, `LiveData`, `data`/`sealed`/`enum`/`object`/utility classes and adds tailored notes.
+- **`@throws` detection** — scans function bodies for `throw` expressions and emits `@throws` tags with the exception type.
+- **`@since` version stamp** — optionally appends `@since <version>` to every generated KDoc, with the version configurable per project.
+- **`@see` cross-references** — links override methods to their super declaration, and sealed subtypes to the parent type.
 - **Usage examples** — optionally appends a fenced code sample to function KDocs (e.g. `val user = getUser(id)`).
 
 ### Non-Destructive Merge
@@ -67,6 +70,10 @@ style:
   usageExample: false         # append a fenced sample call to function KDocs
   includeConstructor: true    # emit the @constructor line for classes
   existingKDoc: merge         # merge | keep | replace
+  throwsDetection: false      # scan function bodies for throw and emit @throws
+  sinceTag: false             # stamp KDocs with @since <version>
+  sinceVersion: "1.0.0"       # version string for @since
+  seeReferences: false        # add @see for overrides and sealed subtypes
   verbMapping:                # extend/override the verb -> phrase map
     fetch: "Fetches the {noun} from the remote source"
     sync: "Synchronises the {noun}"
@@ -96,6 +103,9 @@ All options are available under **Settings > Tools > KDoc-er**:
 - **Visibility** — public, protected, internal, private, overridden members
 - **Description** — prepend element name, split camelCase names, `@constructor` toggle
 - **Framework Awareness** — detect and annotate frameworks
+- **@throws Detection** — scan for throw expressions
+- **@since Tag** — stamp with a version string
+- **@see Cross-References** — link overrides and sealed subtypes
 - **Usage Example** — append sample call to function KDocs
 - **Existing KDoc** — Merge / Keep / Replace policy
 - **Templates** — override description and tag templates with `{placeholder}` tokens
@@ -338,6 +348,81 @@ aspects:
 
 > **Note:** The built-in aspects detect patterns by code structure (annotations, superclasses, naming conventions), not by import paths. If your custom library uses patterns that don't match any built-in aspect (e.g. a custom `@Injectable` annotation), the aspect system won't detect it — but you can still use **verb mappings** and **template overrides** to control the generated descriptions for those elements.
 
+### @throws Detection
+
+When enabled, KDoc-er scans function bodies for `throw` expressions and emits `@throws` tags:
+
+```yaml
+# .kdocer.yaml
+style:
+  throwsDetection: true
+```
+
+```kotlin
+fun requireActive(userId: Long): User {
+    val user = findById(userId) ?: throw NoSuchElementException("User not found")
+    if (!user.active) throw IllegalStateException("User is not active")
+    return user
+}
+
+// Generated KDoc:
+/**
+ * Requires the active
+ *
+ * @param userId
+ * @return the user
+ * @throws IllegalStateException
+ * @throws NoSuchElementException
+ */
+```
+
+### @since Version Stamp
+
+Appends a `@since` tag to every generated KDoc with the configured version string:
+
+```yaml
+# .kdocer.yaml
+style:
+  sinceTag: true
+  sinceVersion: "2.0.0"
+```
+
+```kotlin
+// Generated KDoc:
+/**
+ * Gets the user by id
+ *
+ * @param id
+ * @return the user
+ * @since 2.0.0
+ */
+```
+
+### @see Cross-References
+
+When enabled, KDoc-er adds `@see` links for:
+- **Override methods** → links to the super class method
+- **Sealed subtypes** → links to the parent sealed type
+- **Object singletons** → links to the implemented interface / superclass
+
+```yaml
+# .kdocer.yaml
+style:
+  seeReferences: true
+```
+
+```kotlin
+sealed class NavigationEvent {
+    data class NavigateTo(val route: String) : NavigationEvent()
+    // Generated KDoc for NavigateTo includes: @see NavigationEvent
+}
+
+class UserService : BaseService() {
+    override fun validate(input: String): Boolean { ... }
+    // Generated KDoc for validate includes: @see BaseService.validate
+}
+```
+
 ### Template Overrides
 
 Override the structure of generated KDoc lines using `{placeholder}` tokens:
@@ -370,6 +455,10 @@ style:
   usageExample: false
   includeConstructor: true
   existingKDoc: merge          # merge | keep | replace
+  throwsDetection: true
+  sinceTag: true
+  sinceVersion: "2.0.0"
+  seeReferences: true
   verbMapping:
     sync: "Synchronises the {noun} with the backend"
     navigate: "Navigates to the {noun} screen"

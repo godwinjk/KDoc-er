@@ -3,6 +3,7 @@ package com.kdocer.generator
 import com.intellij.openapi.project.Project
 import com.kdocer.aspect.AspectEngine
 import com.kdocer.nlp.PhraseBuilder
+import com.kdocer.nlp.SeeReferenceResolver
 import com.kdocer.nlp.WordSplitter
 import com.kdocer.style.StyleLoader
 import com.kdocer.template.TemplateEngine
@@ -90,7 +91,20 @@ internal class ClassKDocGenerator(private val project: Project, private val elem
             }
         }
 
+        // @see cross-references (sealed subtypes → parent, object → supertype).
+        if (style.seeReferences) {
+            SeeReferenceResolver.resolve(element).forEach { ref ->
+                builder.appendLine("* @see $ref")
+            }
+        }
+
         aspects.tags.forEach { builder.appendLine("* $it") }
+
+        // @since version stamp.
+        if (style.sinceTag && style.sinceVersion.isNotBlank()) {
+            builder.appendLine("* @since ${style.sinceVersion}")
+        }
+
         builder.appendLine("*/")
         return builder.toString()
     }

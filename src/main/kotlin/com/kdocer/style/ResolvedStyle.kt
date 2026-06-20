@@ -18,4 +18,8 @@ data class ResolvedStyle(
     val usageExample: Boolean,
     val includeConstructor: Boolean,
     val existingKDocPolicy: ExistingKDocPolicy,
+    val throwsDetection: Boolean,
+    val sinceTag: Boolean,
+    val sinceVersion: String,
+    val seeReferences: Boolean,
 )

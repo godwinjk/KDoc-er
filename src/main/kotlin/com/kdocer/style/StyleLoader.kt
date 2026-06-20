@@ -40,6 +40,10 @@ object StyleLoader {
             usageExample = sheet?.usageExample ?: settings.isUsageExample,
             includeConstructor = sheet?.includeConstructor ?: settings.isConstructorLine,
             existingKDocPolicy = sheet?.existingKDocPolicy ?: settings.existingKDocPolicy,
+            throwsDetection = sheet?.throwsDetection ?: settings.isThrowsDetection,
+            sinceTag = sheet?.sinceTag ?: settings.isSinceTag,
+            sinceVersion = sheet?.sinceVersion ?: settings.sinceVersion,
+            seeReferences = sheet?.seeReferences ?: settings.isSeeReferences,
         )
     }
 
