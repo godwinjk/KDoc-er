@@ -16,7 +16,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
 object Validator {
     fun checkElementIsAllowed(element: PsiElement): Boolean {
         val settings = KDocerSettings.getInstance()
-        if (element is KtDeclaration && element.docComment != null && settings.isAllowedKeepDoc) return false
+        // Whether to keep/merge/replace an existing KDoc is decided at insertion time by
+        // ExistingKDocPolicy (see KDocMerger), not here.
         if (element is KtClassOrObject && settings.isAllowedClass) {
             if (hasModifier(element, "internal") && settings.isAllowedInternal ||
                 isPublic(element) && settings.isAllowedPublic ||

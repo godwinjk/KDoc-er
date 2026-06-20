@@ -1,17 +1,19 @@
 package com.kdocer.action
 
-import com.intellij.codeInsight.CodeInsightSettings
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.psi.*
+import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
-import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
+import org.jetbrains.kotlin.psi.KtFile
 
 /**
+ * Removes every KDoc in the current Kotlin file — top-level declarations and all nested
+ * members alike.
+ *
  * Created by Godwin on 7/23/2020 9:16 PM.
  *
  * @author : Godwin Joseph Kurinjikattu
@@ -19,119 +21,25 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
  */
 class KDocerAllRemoveAction : AnAction() {
 
+    override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
+
     override fun update(action: AnActionEvent) {
         super.update(action)
-        val presentation = action.presentation
-
-        val psiFile = action.getData(PlatformDataKeys.PSI_FILE) ?: return
-        if (psiFile !is KtFile || !CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER) {
-            println("This is not Kotlin file. ")
-
-            presentation.isVisible = false
-            presentation.isEnabled = false
-            return
-        }
-        presentation.isVisible = true
-        presentation.isEnabled = true
+        val enabled = action.getData(PlatformDataKeys.PSI_FILE) is KtFile
+        action.presentation.isVisible = enabled
+        action.presentation.isEnabled = enabled
     }
 
     override fun actionPerformed(action: AnActionEvent) {
-        val psiFile = action.getData(PlatformDataKeys.PSI_FILE) ?: return
-        if (psiFile !is KtFile || !CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER) {
-            println("This is not Kotlin file. ")
-            return
-        }
-
+        val psiFile = action.getData(PlatformDataKeys.PSI_FILE) as? KtFile ?: return
         val project = psiFile.project
-        val documentManager = PsiDocumentManager.getInstance(project)
-        documentManager.commitAllDocuments()
+        PsiDocumentManager.getInstance(project).commitAllDocuments()
 
-        if (!isAllowedElementType(psiFile)) return
+        val kdocs = PsiTreeUtil.collectElementsOfType(psiFile, KDoc::class.java)
+        if (kdocs.isEmpty()) return
 
-        processFile(psiFile)
-    }
-
-    private fun processFile(file: KtFile) {
-        val psiElements = ArrayList<PsiElement>()
-        file.children.forEach {
-            psiElements.addAll(
-                when (it) {
-                    is KtClass -> getClasses(it)
-                    is KtNamedFunction -> getFunctions(it)
-                    else -> arrayListOf()
-                }
-            )
+        WriteCommandAction.runWriteCommandAction(project) {
+            kdocs.forEach { if (it.isValid) it.delete() }
         }
-
-        psiElements.forEach {
-            processElement(it)
-        }
-    }
-
-    private fun processElement(psiElement: PsiElement) {
-        val project = psiElement.project
-
-        ApplicationManager.getApplication().invokeLater {
-            WriteCommandAction.runWriteCommandAction(project) {
-                psiElement.getChildOfType<KDoc>()?.delete()
-            }
-        }
-    }
-
-    private fun getClasses(ktClass: PsiElement): List<PsiElement> {
-        val elements = ArrayList<PsiElement>(1)
-        ktClass.children.forEach {
-            elements.addAll(
-                when (it) {
-                    is KtClass -> {
-                        elements.add(it)
-                        getClasses(it)
-                    }
-                    is KtClassBody -> getClasses(it)
-                    is KtNamedFunction -> {
-                        elements.add(it)
-                        getFunctions(it)
-                    }
-                    is KtProperty -> arrayListOf(it)
-                    else -> arrayListOf()
-                }
-            )
-        }
-        return elements.toList()
-    }
-
-    private fun getFunctions(ktNamedFunction: KtNamedFunction): List<PsiElement> {
-        val elements = ArrayList<PsiElement>(1)
-        ktNamedFunction.children.forEach {
-            elements.addAll(
-                when (it) {
-                    is KtClass -> {
-                        elements.add(it)
-                        getClasses(it)
-                    }
-                    is KtNamedFunction -> {
-                        elements.add(it)
-                        getFunctions(it)
-                    }
-                    is KtBlockExpression -> {
-                        getClasses(it)
-                    }
-                    else -> arrayListOf()
-                }
-            )
-        }
-        return elements.toList()
-    }
-
-    private fun isAllowedElementType(element: PsiElement): Boolean {
-        var result = false
-        if (element is PsiClass ||
-            element is PsiField ||
-            element is PsiMethod ||
-            element is KtFile
-        ) {
-            result = true
-        }
-        return result
     }
 }

@@ -3,3 +3,6 @@
 .gradle
 .sandbox
 
+/.intellijPlatform/
+.claude
+CLAUDE.md

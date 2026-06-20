@@ -1,10 +1,11 @@
 package com.kdocer.service
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
+import com.kdocer.merge.ExistingKDocPolicy
 import com.kdocer.util.KDocerConfiguration
 
 /**
@@ -23,7 +24,7 @@ import com.kdocer.util.KDocerConfiguration
 class KDocerSettings : PersistentStateComponent<KDocerSettings> {
     companion object {
         fun getInstance(): KDocerSettings {
-            return ServiceManager.getService(KDocerSettings::class.java)
+            return ApplicationManager.getApplication().getService(KDocerSettings::class.java)
         }
     }
 
@@ -32,8 +33,8 @@ class KDocerSettings : PersistentStateComponent<KDocerSettings> {
     var isAllowedProtected: Boolean = true
     var isAllowedInternal: Boolean = true
 
-    var isAllowedKeepDoc: Boolean = false
-    var isAllowedReplaceDoc: Boolean = true
+    // --- What to do when a declaration already has a KDoc ---
+    var existingKDocPolicy: ExistingKDocPolicy = ExistingKDocPolicy.MERGE
 
     var isAllowedOverride: Boolean = false
     var isSplittedClassNames: Boolean = true
@@ -45,6 +46,24 @@ class KDocerSettings : PersistentStateComponent<KDocerSettings> {
 
     var lastShowedTime: Long = 0L
     var isDisabledNotification: Boolean = false
+    var actionCount: Int = 0
+
+    // --- Template overrides (empty string means "use built-in default") ---
+    var templateFunctionDescription: String = ""
+    var templateParam: String = ""
+    var templateReturn: String = ""
+    var templateClassDescription: String = ""
+    var templatePropertyDescription: String = ""
+    var templateConstructor: String = ""
+
+    // --- Framework awareness (Compose / ViewModel / LiveData / data / sealed / object …) ---
+    var isFrameworkAware: Boolean = true
+
+    // --- Usage example (a small fenced sample call appended to function KDocs) ---
+    var isUsageExample: Boolean = false
+
+    // --- Whether to emit the @constructor line for classes ---
+    var isConstructorLine: Boolean = true
 
     override fun getState(): KDocerSettings? {
         return this

@@ -1,9 +1,7 @@
 package com.kdocer.util
 
-import com.intellij.notification.Notification
-import com.intellij.notification.NotificationListener
+import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
-import com.intellij.notification.Notifications
 import com.kdocer.service.KDocerSettings
 
 /**
@@ -14,44 +12,34 @@ import com.kdocer.service.KDocerSettings
  */
 
 object NotificationHelper {
-    private var lastShowedNotification: Long = 0L
+    private const val GROUP_ID = "KDoc-er"
+    private const val ACTION_THRESHOLD = 20
+
     fun showNotification(message: String) {
         if (!checkIsAllowedSlot()) return
-        Notifications.Bus.notify(
-            Notification(
-                "KDoc-er",
-                "Like it",
-                message,
-                NotificationType.INFORMATION,
-                NotificationListener.UrlOpeningListener(true)
-            )
-        )
+        notify("Like it", message)
     }
 
     fun showNotification(title: String, message: String) {
-        Notifications.Bus.notify(
-            Notification(
-                "KDoc-er",
-                title,
-                message,
-                NotificationType.INFORMATION,
-                NotificationListener.UrlOpeningListener(true)
-            )
-        )
+        notify(title, message)
+    }
+
+    private fun notify(title: String, message: String) {
+        NotificationGroupManager.getInstance()
+            .getNotificationGroup(GROUP_ID)
+            .createNotification(title, message, NotificationType.INFORMATION)
+            .notify(null)
     }
 
     private fun checkIsAllowedSlot(): Boolean {
         val settings = KDocerSettings.getInstance()
+        if (settings.isDisabledNotification) return false
 
-        return if (settings.isDisabledNotification) false
-        else if (lastShowedNotification > 0
-            && (lastShowedNotification < (System.currentTimeMillis() - 1000 * 60 * 60 * 5))
-        ) {//this means 5 hour difference
-            lastShowedNotification = System.currentTimeMillis()
-            true
-        } else if (lastShowedNotification == 0L) {
-            lastShowedNotification = System.currentTimeMillis()
-            true
-        } else false
+        settings.actionCount++
+        if (settings.actionCount >= ACTION_THRESHOLD) {
+            settings.actionCount = 0
+            return true
+        }
+        return false
     }
 }

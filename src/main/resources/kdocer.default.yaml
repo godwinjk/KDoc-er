@@ -1,0 +1,32 @@
+# .kdocer.yaml — project-level KDoc-er configuration.
+#
+# Uncomment and edit any key below. Anything left commented falls back to the IDE
+# settings (Settings > Tools > KDoc-er), then to the built-in defaults. Delete this
+# file to rely entirely on settings/defaults.
+
+#style:
+#  appendName: true            # prepend a generated description sentence to each KDoc
+#  splitNames: true            # split camelCase/snake_case names into readable phrases
+#  frameworkAware: true        # add notes for Compose / ViewModel / LiveData / data / sealed / object / util
+#  usageExample: false         # append a fenced sample call to function KDocs, e.g. `val user = getUser()`
+#  includeConstructor: true    # emit the @constructor line for classes
+#  existingKDoc: merge         # what to do when a KDoc already exists: merge | keep | replace
+#  verbMapping:                # extend/override the verb -> phrase map ({noun} = the rest of the name)
+#    fetch: "Fetches the {noun} from the remote source"
+#    sync: "Synchronises the {noun}"
+
+#aspects:
+#  notes:                      # override framework note wording ({name} = element name)
+#    compose: "Jetpack Compose UI for {name}."
+#    viewmodel: "Holds and exposes the UI state for the {name} screen."
+
+#templates:
+#  function:
+#    description: "{description}"          # tokens: {description}
+#    param: "* @param {name} the {noun}"  # tokens: {name}, {noun}
+#    return: "* @return {description}"     # tokens: {description}
+#  class:
+#    description: "{description}"          # tokens: {description}
+#    constructor: "* @constructor {description}"
+#  property:
+#    description: "{description}"          # tokens: {description}

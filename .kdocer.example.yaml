@@ -1,0 +1,40 @@
+# KDoc-er style sheet (optional).
+# Copy to `.kdocer.yaml` in your project root to override the plugin defaults.
+# Every key is optional; anything omitted falls back to the IDE settings, then built-in defaults.
+
+style:
+  # Append a generated description sentence to each KDoc.
+  appendName: true
+  # Split camelCase/snake_case names into readable phrases.
+  splitNames: true
+  # Detect frameworks (Compose, ViewModel, LiveData, data/sealed/enum/object/util) and add notes.
+  frameworkAware: true
+  # Append a fenced usage example to function KDocs, e.g. `val user = getUser()`.
+  usageExample: false
+  # Emit the @constructor line for classes.
+  includeConstructor: true
+  # What to do when a declaration already has a KDoc: merge | keep | replace.
+  existingKDoc: merge
+  # Extend or override the built-in verb -> phrase mapping. {noun} is the rest of the name.
+  verbMapping:
+    fetch: "Fetches the {noun} from the remote source"
+    sync: "Synchronises the {noun}"
+
+# Override the note text emitted by framework detectors. Keyed by aspect id; {name} = element name.
+# Available ids: compose, compose-preview, viewmodel, data-class, sealed, enum, companion,
+#                object, util, livedata, flow-state
+aspects:
+  notes:
+    compose: "Jetpack Compose UI for {name}."
+    viewmodel: "Holds and exposes the UI state for the {name} screen."
+
+templates:
+  function:
+    description: "{description}"          # tokens: {description}
+    param: "* @param {name} the {noun}"  # tokens: {name}, {noun}
+    return: "* @return {description}"     # tokens: {description}
+  class:
+    description: "{description}"          # tokens: {description}
+    constructor: "* @constructor {description}"
+  property:
+    description: "{description}"          # tokens: {description}

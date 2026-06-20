@@ -1,47 +1,134 @@
 package com.kdocer.generator
 
 import com.intellij.openapi.project.Project
-import com.kdocer.util.Validator
+import com.kdocer.aspect.AspectEngine
+import com.kdocer.nlp.CoroutineAnalyzer
+import com.kdocer.nlp.PhraseBuilder
+import com.kdocer.nlp.UsageExampleBuilder
+import com.kdocer.nlp.WordSplitter
+import com.kdocer.style.ResolvedStyle
+import com.kdocer.style.StyleLoader
+import com.kdocer.template.TemplateEngine
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.permissions.KaAllowAnalysisOnEdt
+import org.jetbrains.kotlin.analysis.api.permissions.allowAnalysisOnEdt
+import org.jetbrains.kotlin.analysis.api.renderer.types.impl.KaTypeRendererForSource
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.psi.KtFunctionType
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.types.Variance
 
 class NamedFunctionKDocGenerator(private val project: Project, private val element: KtNamedFunction) :
     KDocGenerator {
-    override fun generate(): String {
-        val isAppendName = Validator.isAppendName()
 
-        // Return an empty KDoc, if applicable
-        val isEmpty = !isAppendName && element.typeParameters.isEmpty() && element.valueParameters.isEmpty()
-                && (element.typeReference?.text ?: "Unit") == "Unit"
-        if (isEmpty)
-            return "/**\n * \n */\n"
+    override fun generate(): String {
+        val style = StyleLoader.resolve(project)
+        val t = style.template
+        val coroutine = CoroutineAnalyzer.analyze(element)
+        val aspects = AspectEngine.analyze(element, style)
+
+        // Explicit type when present, otherwise resolve an expression body's inferred type.
+        val returnType = element.typeReference?.text ?: inferredReturnType()
+        val hasReturn = (returnType ?: "Unit") != "Unit"
+
+        // Nothing to document and nothing to say: emit a minimal stub.
+        val isEmpty = !style.appendName && element.typeParameters.isEmpty() &&
+                element.valueParameters.isEmpty() && !hasReturn && !coroutine.hasNotes && aspects.isEmpty
+        if (isEmpty) return "/**\n * \n */\n"
 
         val builder = StringBuilder()
-        val nameToPhrase = if (Validator.isNameNeedsSplit()) nameToPhrase(element.name ?: "Function") else element.name
         builder.appendLine("/**")
-            .append("* ").apply { if (isAppendName) append(nameToPhrase) }.appendLine()
-            .appendLine("*")
 
-        if (element.typeParameters.isNotEmpty()) {
-            builder.appendLine(toParamsKdoc(params = element.typeParameters))
+        // Description line.
+        builder.append("* ")
+        if (style.appendName) {
+            val description = describe(style, returnType)
+            builder.append(TemplateEngine.render(t.functionDescription, mapOf("description" to description)))
         }
-        if (element.valueParameters.isNotEmpty()) {
-            builder.appendLine(toParamsKdoc(params = element.valueParameters))
-            element.valueParameters.forEach end@{
-                if (it.typeReference != null && it.typeReference?.typeElement is KtFunctionType) {
-                    builder.appendLine("* @receiver")
-                    return@end
-                }
+        builder.appendLine()
+
+        // Coroutine / suspension and framework-aware notes.
+        coroutine.noteLines.forEach { builder.appendLine("* $it") }
+        aspects.notes.forEach { builder.appendLine("* $it") }
+
+        // Optional usage example.
+        if (style.usageExample) {
+            val example = UsageExampleBuilder.forFunction(
+                name = element.name ?: "",
+                paramNames = element.valueParameters.mapNotNull { it.name },
+                returnTypeText = returnType,
+                receiverTypeText = element.receiverTypeReference?.text,
+            )
+            if (example.isNotEmpty()) {
+                builder.appendLine("*")
+                example.forEach { builder.appendLine("* $it") }
             }
         }
-        element.typeReference?.let {
-            if (it.text != "Unit") {
-                builder.appendLine("* @return")
+        builder.appendLine("*")
+
+        // Type parameters.
+        element.typeParameters.forEach {
+            builder.appendLine(TemplateEngine.render(t.typeParamLine, mapOf("name" to (it.name ?: ""))))
+        }
+
+        // Value parameters.
+        element.valueParameters.forEach { param ->
+            builder.appendLine(
+                TemplateEngine.render(
+                    t.paramLine,
+                    mapOf("name" to (param.name ?: ""), "noun" to WordSplitter.nounOrEmpty(param.name ?: "")),
+                )
+            )
+            // Preserve original behaviour: a function-typed parameter documents a receiver.
+            if (param.typeReference?.typeElement is KtFunctionType) {
+                builder.appendLine("* @receiver")
             }
         }
 
+        // Return value — coroutine/Flow note wins, otherwise a short type-derived phrase
+        // so @return is meaningful rather than blank.
+        if (hasReturn) {
+            val returnDescription = coroutine.returnDescription ?: PhraseBuilder.returnPhrase(returnType) ?: ""
+            if (returnDescription.isNotBlank()) {
+                builder.appendLine(TemplateEngine.render(t.returnLine, mapOf("description" to returnDescription)))
+            }
+        }
+
+        // Framework-aware tag lines (e.g. @see).
+        aspects.tags.forEach { builder.appendLine("* $it") }
 
         builder.appendLine("*/")
         return builder.toString()
+    }
+
+    private fun describe(style: ResolvedStyle, returnType: String?): String {
+        val name = element.name ?: "Function"
+        return if (!style.splitNames) name
+        else PhraseBuilder.describe(
+            name = name,
+            returnTypeText = returnType,
+            receiverTypeText = element.receiverTypeReference?.text,
+            verbMapping = style.verbMapping,
+        )
+    }
+
+    /**
+     * Resolves the inferred return type of an expression-body function (`fun f() = expr`)
+     * via the K2 Analysis API. Returns `null` for block bodies, `Unit`, or on any failure.
+     */
+    @OptIn(KaExperimentalApi::class, KaAllowAnalysisOnEdt::class)
+    private fun inferredReturnType(): String? {
+        if (element.bodyExpression == null || element.hasBlockBody()) return null
+        return try {
+            allowAnalysisOnEdt {
+                analyze(element) {
+                    val symbol = element.symbol as? KaNamedFunctionSymbol ?: return@analyze null
+                    symbol.returnType.render(KaTypeRendererForSource.WITH_SHORT_NAMES, position = Variance.INVARIANT)
+                }
+            }?.takeUnless { it == "Unit" }
+        } catch (t: Throwable) {
+            null
+        }
     }
 }
