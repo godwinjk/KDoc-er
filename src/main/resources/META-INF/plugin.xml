@@ -17,7 +17,13 @@
         <notificationGroup id="KDoc-er" displayType="BALLOON"/>
         <localInspection language="kotlin"
                          implementationClass="com.kdocer.inspection.MissingKDocInspection"
-                         displayName="Missing KDoc comment"
+                         displayName="Missing KDoc comment (suggestion)"
+                         groupName="KDoc-er"
+                         enabledByDefault="true"
+                         level="INFORMATION"/>
+        <localInspection language="kotlin"
+                         implementationClass="com.kdocer.inspection.MissingKDocWarningInspection"
+                         displayName="Missing KDoc comment (warning)"
                          groupName="KDoc-er"
                          enabledByDefault="false"
                          level="WEAK WARNING"/>

@@ -49,9 +49,9 @@ Three policies for handling existing KDocs:
 
 ### Missing KDoc Inspection
 
-An optional inspection (disabled by default) flags undocumented declarations as a weak warning. Use **Alt+Enter** to generate the missing KDoc via the quick-fix.
+An inspection (enabled by default) gently suggests adding KDoc to undocumented declarations. Use **Alt+Enter** to generate the missing KDoc via the quick-fix.
 
-Enable it in *Settings > Editor > Inspections > KDoc-er > Missing KDoc comment*.
+Configure or disable it in *Settings > Editor > Inspections > KDoc-er > Missing KDoc comment*.
 
 ### Project-Level Configuration
 
