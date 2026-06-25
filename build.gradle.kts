@@ -1,102 +1,93 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
-import org.jetbrains.intellij.platform.gradle.TestFrameworkType
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     java
-    id("org.jetbrains.kotlin.jvm") version "2.4.0"
-    id("org.jetbrains.intellij.platform") version "2.16.0"
+    id("org.jetbrains.kotlin.jvm") version "2.4.0" apply false
+    id("org.jetbrains.intellij.platform") version "2.16.0" apply false
     id("org.jetbrains.changelog") version "2.5.0"
 }
 
-group = providers.gradleProperty("pluginGroup").get()
-version = providers.gradleProperty("pluginVersion").get()
-
-repositories {
-    mavenCentral()
-    intellijPlatform {
-        defaultRepositories()
-    }
-}
-
-dependencies {
-    // SnakeYAML is bundled with the IDE; compileOnly so we don't ship a second copy.
-    compileOnly("org.yaml:snakeyaml:2.2")
-
-    // IntelliJ Platform Gradle Plugin 2.x: target IDE, bundled plugins and the test framework.
-    // The IDE type/version come from gradle.properties.
-    intellijPlatform {
-        create(
-            providers.gradleProperty("platformType").get(),
-            providers.gradleProperty("platformVersion").get(),
-        )
-        bundledPlugin("com.intellij.java")
-        bundledPlugin("org.jetbrains.kotlin")
-        testFramework(TestFrameworkType.Platform)
-    }
-
-    // Pure-logic tests use JUnit 5 (Jupiter); the JUnit 3/4-style IntelliJ fixture tests
-    // run on the same JUnit Platform via the Vintage engine.
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("junit:junit:4.13.2")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.10.2")
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
-    }
-}
-
-intellijPlatform {
-    pluginConfiguration {
-        name = providers.gradleProperty("pluginName")
-        version = providers.gradleProperty("pluginVersion")
-
-        // Plugin description = the marked section of README.md, converted Markdown -> HTML.
-        description = providers.provider {
-            val readme = file("README.md").readText()
-            val start = "<!-- Plugin description -->"
-            val end = "<!-- Plugin description end -->"
-            if (!readme.contains(start) || !readme.contains(end)) {
-                throw GradleException("README.md is missing the plugin description markers")
-            }
-            markdownToHTML(readme.substringAfter(start).substringBefore(end).trim())
-        }
-
-        // Change notes = the matching CHANGELOG.md entry, converted to HTML.
-        changeNotes = providers.provider {
-            val pluginVersion = providers.gradleProperty("pluginVersion").get()
-            with(changelog) {
-                renderItem(
-                    (getOrNull(pluginVersion) ?: getUnreleased())
-                        .withHeader(false)
-                        .withEmptySections(false),
-                    Changelog.OutputType.HTML,
-                )
-            }
-        }
-
-        ideaVersion {
-            sinceBuild = providers.gradleProperty("pluginSinceBuild")
-            // Open-ended compatibility (no upper bound).
-            untilBuild.unset()
-        }
-    }
-}
-
 changelog {
-    version = providers.gradleProperty("pluginVersion")
+    version = "2026.1.1"
     groups = listOf("Added", "Changed", "Deprecated", "Removed", "Fixed", "Security")
 }
 
-tasks.test {
-    useJUnitPlatform()
+subprojects {
+    apply(plugin = "java")
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+
+    group = providers.gradleProperty("pluginGroup").get()
+
+    afterEvaluate {
+        val javaVersion = if (plugins.hasPlugin("org.jetbrains.intellij.platform")) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+        val jvmTarget = if (plugins.hasPlugin("org.jetbrains.intellij.platform"))
+            org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21 else org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+
+        java {
+            sourceCompatibility = javaVersion
+            targetCompatibility = javaVersion
+        }
+
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+            compilerOptions {
+                this.jvmTarget.set(jvmTarget)
+            }
+        }
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        "testImplementation"("org.junit.jupiter:junit-jupiter:5.10.2")
+        "testRuntimeOnly"("org.junit.platform:junit-platform-launcher")
+        "testImplementation"("junit:junit:4.13.2")
+        "testRuntimeOnly"("org.junit.vintage:junit-vintage-engine:5.10.2")
+    }
+}
+
+// Convenience tasks to build/run/verify all three plugins from the root.
+val pluginModules = listOf("kdocer", "dartdocer", "rustdocer")
+
+tasks.register("buildAllPlugins") {
+    group = "build"
+    description = "Builds distributable ZIPs for all three plugins."
+    dependsOn(pluginModules.map { ":$it:buildPlugin" })
+}
+
+tasks.register("verifyAllPlugins") {
+    group = "verification"
+    description = "Verifies plugin structure and compatibility for all three plugins."
+    dependsOn(pluginModules.map { ":$it:verifyPlugin" })
+}
+
+tasks.register("testAll") {
+    group = "verification"
+    description = "Runs tests for all modules (engine + plugins)."
+    dependsOn(":engine:test")
+    dependsOn(pluginModules.map { ":$it:test" })
+}
+
+tasks.register("runKdocer") {
+    group = "intellij platform"
+    description = "Runs a sandboxed IDE with the KDoc-er (Kotlin) plugin loaded."
+    dependsOn(":kdocer:runIde")
+}
+
+tasks.register("runDartdocer") {
+    group = "intellij platform"
+    description = "Runs a sandboxed IDE with the DartDoc-er (Dart) plugin loaded."
+    dependsOn(":dartdocer:runIde")
+}
+
+tasks.register("runRustdocer") {
+    group = "intellij platform"
+    description = "Runs a sandboxed IDE with the RustDoc-er (Rust) plugin loaded."
+    dependsOn(":rustdocer:runIde")
 }

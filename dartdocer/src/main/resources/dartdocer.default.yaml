@@ -1,0 +1,35 @@
+# .dartdocer.yaml — project-level DartDoc-er configuration.
+#
+# Uncomment and edit any key below. Anything left commented falls back to the IDE
+# settings (Settings > Tools > DartDoc-er), then to the built-in defaults. Delete this
+# file to rely entirely on settings/defaults.
+
+#style:
+#  appendName: true            # prepend a generated description sentence to each DartDoc
+#  splitNames: true            # split camelCase/snake_case names into readable phrases
+#  frameworkAware: true        # add notes for Flutter widgets, ChangeNotifier, @freezed, enum, mixin, extension
+#  usageExample: false         # append a fenced sample call to function DartDocs, e.g. `final user = getUser();`
+#  includeConstructor: true    # emit a constructor description line for classes
+#  existingKDoc: merge         # what to do when a DartDoc already exists: merge | keep | replace
+#  throwsDetection: true       # scan function bodies for throw expressions and document them
+#  sinceTag: false             # stamp generated DartDocs with a version tag
+#  sinceVersion: ""            # version string, e.g. "1.0.0" or "2024.1"
+#  seeReferences: false        # add see-also references (superclass, interfaces, overrides)
+#  verbMapping:                # extend/override the verb -> phrase map ({noun} = the rest of the name)
+#    fetch: "Fetches the {noun} from the remote source"
+#    sync: "Synchronises the {noun}"
+
+#aspects:
+#  notes:                      # override framework note wording ({name} = element name)
+#    flutter-stateless: "Stateless Flutter widget for {name}."
+#    flutter-stateful: "Stateful Flutter widget for {name}."
+
+#templates:
+#  function:
+#    description: "{description}"          # tokens: {description}
+#    return: "Returns {description}."      # tokens: {description}
+#  class:
+#    description: "{description}"          # tokens: {description}
+#    constructor: "Creates a new [{name}]."
+#  property:
+#    description: "{description}"          # tokens: {description}

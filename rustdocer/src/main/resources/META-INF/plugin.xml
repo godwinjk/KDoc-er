@@ -1,0 +1,52 @@
+<idea-plugin>
+    <id>com.godwin.rustdocer</id>
+    <name>RustDoc-er - Rust Doc Generator</name>
+    <vendor email="godwinsona.k@gmail.com">Godwin Joseph</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.jetbrains.rust</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <enterHandlerDelegate implementation="com.rustdocer.EnterAfterRustDocGenHandler" order="first"/>
+
+        <applicationService serviceImplementation="com.rustdocer.service.RustDocerSettings"/>
+
+        <applicationConfigurable parentId="tools"
+                                 instance="com.rustdocer.service.RustDocerConfigurable"
+                                 id="com.rustdocer.service.RustDocerConfigurable"
+                                 displayName="RustDoc-er"/>
+
+        <notificationGroup id="RustDoc-er" displayType="BALLOON"/>
+
+        <localInspection language="Rust"
+                         implementationClass="com.rustdocer.inspection.MissingRustDocInspection"
+                         displayName="Missing RustDoc comment"
+                         groupName="RustDoc-er"
+                         level="INFORMATION"
+                         enabledByDefault="true"/>
+    </extensions>
+
+    <actions>
+        <group id="RustDoc-er-file-menu" text="RustDoc-er" popup="true">
+            <add-to-group group-id="ProjectViewPopupMenuModifyGroup" anchor="last"/>
+            <action id="RustDocAllGenAction" class="com.rustdocer.action.RustDocAllGenAction"
+                    text="Generate RustDocs for All Elements"/>
+            <action id="RustDocAllRemoveAction" class="com.rustdocer.action.RustDocAllRemoveAction"
+                    text="Remove RustDocs for All Elements"/>
+            <action id="RustDocDirectoryGenAction" class="com.rustdocer.action.RustDocDirectoryGenAction"
+                    text="Create RustDocs in Folder"/>
+        </group>
+        <group id="RustDoc-er-menu" text="RustDoc-er" popup="true">
+            <add-to-group group-id="CodeFormatGroup" anchor="last"/>
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <action id="RustDocAllGenAction2" class="com.rustdocer.action.RustDocAllGenAction"
+                    text="Create RustDocs for All Elements"/>
+            <action id="RustDocGenAction" class="com.rustdocer.action.RustDocGenAction"
+                    text="Create RustDoc for Element"/>
+            <action id="RustDocRemoveAction" class="com.rustdocer.action.RustDocRemoveAction"
+                    text="Remove RustDoc for Element"/>
+            <action id="RustDocAllRemoveAction2" class="com.rustdocer.action.RustDocAllRemoveAction"
+                    text="Remove RustDocs for All Elements"/>
+        </group>
+    </actions>
+</idea-plugin>

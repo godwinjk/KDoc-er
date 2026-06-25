@@ -1,0 +1,55 @@
+<idea-plugin>
+    <id>com.godwin.dartdocer</id>
+    <name>DartDoc-er - Dart Doc Generator</name>
+    <vendor email="godwinsona.k@gmail.com">Godwin Joseph</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>Dart</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <enterHandlerDelegate implementation="com.dartdocer.EnterAfterDartDocGenHandler" order="first"/>
+        <applicationService serviceImplementation="com.dartdocer.service.DartDocerSettings"/>
+        <applicationConfigurable parentId="tools"
+                                 instance="com.dartdocer.service.DartDocerConfigurable"
+                                 id="com.dartdocer.service.DartDocerConfigurable"
+                                 displayName="DartDoc-er"/>
+        <notificationGroup id="DartDoc-er" displayType="BALLOON"/>
+        <localInspection language="Dart"
+                         implementationClass="com.dartdocer.inspection.MissingDartDocInspection"
+                         displayName="Missing DartDoc comment"
+                         groupName="DartDoc-er"
+                         level="INFORMATION"
+                         enabledByDefault="true"/>
+    </extensions>
+
+    <actions>
+        <group id="DartDoc-er-file-menu" text="DartDoc-er" popup="true">
+            <add-to-group group-id="ProjectViewPopupMenuModifyGroup" anchor="last"/>
+            <action id="DartDocAllGenAction" class="com.dartdocer.action.DartDocAllGenAction"
+                    text="Generate DartDocs for All Elements"
+                    description="Generate DartDocs for all elements in the current Dart file."/>
+            <action id="DartDocAllRemoveAction" class="com.dartdocer.action.DartDocAllRemoveAction"
+                    text="Remove DartDocs for All Elements"
+                    description="Remove all DartDoc comments from the current Dart file."/>
+            <action id="DartDocDirectoryGenAction" class="com.dartdocer.action.DartDocDirectoryGenAction"
+                    text="Create DartDocs in Folder"
+                    description="Generate DartDocs for every Dart file under the selected folder(s)."/>
+        </group>
+        <group id="DartDoc-er-menu" text="DartDoc-er" popup="true">
+            <add-to-group group-id="CodeFormatGroup" anchor="last"/>
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <action id="DartDocAllGenAction2" class="com.dartdocer.action.DartDocAllGenAction"
+                    text="Create DartDocs for All Elements"
+                    description="Generate DartDocs for all elements in the current Dart file."/>
+            <action id="DartDocGenAction" class="com.dartdocer.action.DartDocGenAction"
+                    text="Create DartDoc for Element"
+                    description="Generate DartDoc for the element at the caret."/>
+            <action id="DartDocRemoveAction" class="com.dartdocer.action.DartDocRemoveAction"
+                    text="Remove DartDoc for Element"
+                    description="Remove DartDoc from the element at the caret."/>
+            <action id="DartDocAllRemoveAction2" class="com.dartdocer.action.DartDocAllRemoveAction"
+                    text="Remove DartDocs for All Elements"
+                    description="Remove all DartDoc comments from the current Dart file."/>
+        </group>
+    </actions>
+</idea-plugin>

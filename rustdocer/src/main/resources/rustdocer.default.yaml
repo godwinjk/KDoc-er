@@ -1,0 +1,34 @@
+# .rustdocer.yaml — project-level RustDoc-er configuration.
+#
+# Uncomment and edit any key below. Anything left commented falls back to the IDE
+# settings (Settings > Tools > RustDoc-er), then to the built-in defaults. Delete this
+# file to rely entirely on settings/defaults.
+
+#style:
+#  appendName: true            # prepend a generated description sentence to each RustDoc
+#  splitNames: true            # split snake_case/CamelCase names into readable phrases
+#  frameworkAware: true        # add notes for derive macros, serde, async_trait, unsafe, etc.
+#  usageExample: false         # append a fenced # Examples section to function RustDocs
+#  existingKDoc: merge         # what to do when a doc comment already exists: merge | keep | replace
+#  throwsDetection: true       # scan function bodies for panic!/unwrap/expect and emit # Panics section
+#  sinceTag: false             # stamp generated RustDocs with a version note
+#  sinceVersion: ""            # version string, e.g. "0.1.0"
+#  seeReferences: false        # add see-also references (trait implementations, supertypes)
+#  verbMapping:                # extend/override the verb -> phrase map ({noun} = the rest of the name)
+#    fetch: "Fetches the {noun} from the remote source"
+#    sync: "Synchronises the {noun}"
+
+#aspects:
+#  notes:                      # override crate-aware note wording ({name} = element name)
+#    derive: "Derives {name}."
+#    serde: "Serialization/deserialization support via serde."
+
+#templates:
+#  function:
+#    description: "{description}"
+#    param: "* `{name}` - the {noun}"
+#    return: "{description}"
+#  class:
+#    description: "{description}"
+#  property:
+#    description: "{description}"
