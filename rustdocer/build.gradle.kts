@@ -4,10 +4,9 @@ import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 val pluginName = "RustDoc-er - Rust Doc Generator"
 val pluginVersion = "2026.1.1"
-val pluginSinceBuild = "251"
-val platformType = "IC"
-val platformVersion = "2025.2"
-val rustPluginVersion = "251.26927.79"
+val pluginSinceBuild = "241"
+val platformType = "RR"
+val platformVersion = "2026.1.3"
 
 plugins {
     id("org.jetbrains.intellij.platform")
@@ -26,8 +25,8 @@ dependencies {
     compileOnly("org.yaml:snakeyaml:2.2")
 
     intellijPlatform {
-        create(platformType, platformVersion)
-        plugin("com.jetbrains.rust", rustPluginVersion)
+        local("/Applications/RustRover.app")
+        bundledPlugin("com.jetbrains.rust")
         testFramework(TestFrameworkType.Platform)
     }
 }

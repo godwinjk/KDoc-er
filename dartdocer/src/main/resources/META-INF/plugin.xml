@@ -3,7 +3,7 @@
     <name>DartDoc-er - Dart Doc Generator</name>
     <vendor email="godwinsona.k@gmail.com">Godwin Joseph</vendor>
 
-    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.idea</depends>
     <depends>Dart</depends>
 
     <extensions defaultExtensionNs="com.intellij">

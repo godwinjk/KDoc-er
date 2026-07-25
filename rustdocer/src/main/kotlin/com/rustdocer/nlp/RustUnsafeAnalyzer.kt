@@ -2,11 +2,11 @@ package com.rustdocer.nlp
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import org.rust.lang.core.psi.RsBlock
 import org.rust.lang.core.psi.RsBlockExpr
 import org.rust.lang.core.psi.RsFunction
 import org.rust.lang.core.psi.RsImplItem
 import org.rust.lang.core.psi.RsTraitItem
-import org.rust.lang.core.psi.ext.block
 
 /**
  * Detects unsafe patterns in Rust code:
@@ -33,7 +33,7 @@ object RustUnsafeAnalyzer {
 
     private fun analyzeFunction(function: RsFunction): UnsafeInfo {
         val isUnsafe = function.isUnsafe
-        val body = function.block
+        val body = PsiTreeUtil.getChildOfType(function, RsBlock::class.java)
         val hasUnsafeBlocks = body != null &&
             PsiTreeUtil.collectElementsOfType(body, RsBlockExpr::class.java).any { it.unsafe != null }
         return UnsafeInfo(isUnsafe, hasUnsafeBlocks)

@@ -6,18 +6,16 @@ import org.rust.lang.core.psi.RsFunction
 import org.rust.lang.core.psi.RsImplItem
 import org.rust.lang.core.psi.RsStructItem
 import org.rust.lang.core.psi.RsTraitItem
-import org.rust.lang.core.psi.ext.name
-
 /* ---- shared PSI helpers ---- */
 
 private fun PsiElement.hasOuterAttr(name: String): Boolean {
     val attrOwner = this
     return when (attrOwner) {
-        is RsStructItem -> attrOwner.outerAttrList.any { it.metaItem?.name == name }
-        is RsEnumItem -> attrOwner.outerAttrList.any { it.metaItem?.name == name }
-        is RsFunction -> attrOwner.outerAttrList.any { it.metaItem?.name == name }
-        is RsTraitItem -> attrOwner.outerAttrList.any { it.metaItem?.name == name }
-        is RsImplItem -> attrOwner.outerAttrList.any { it.metaItem?.name == name }
+        is RsStructItem -> attrOwner.outerAttrList.any { it.metaItem?.path?.referenceName == name }
+        is RsEnumItem -> attrOwner.outerAttrList.any { it.metaItem?.path?.referenceName == name }
+        is RsFunction -> attrOwner.outerAttrList.any { it.metaItem?.path?.referenceName == name }
+        is RsTraitItem -> attrOwner.outerAttrList.any { it.metaItem?.path?.referenceName == name }
+        is RsImplItem -> attrOwner.outerAttrList.any { it.metaItem?.path?.referenceName == name }
         else -> false
     }
 }
@@ -28,9 +26,9 @@ private fun PsiElement.derivedTraits(): List<String> {
         is RsEnumItem -> outerAttrList
         else -> return emptyList()
     }
-    return attrs.filter { it.metaItem?.name == "derive" }
+    return attrs.filter { it.metaItem?.path?.referenceName == "derive" }
         .flatMap { attr ->
-            attr.metaItem?.metaItemArgs?.metaItemList?.mapNotNull { it.name } ?: emptyList()
+            attr.metaItem?.metaItemArgs?.metaItemList?.mapNotNull { it.path?.referenceName } ?: emptyList()
         }
 }
 

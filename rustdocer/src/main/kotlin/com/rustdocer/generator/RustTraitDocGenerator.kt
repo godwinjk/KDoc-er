@@ -7,9 +7,10 @@ import com.docer.engine.template.TemplateEngine
 import com.rustdocer.aspect.RustAspectEngine
 import com.rustdocer.nlp.RustSeeReferenceResolver
 import com.rustdocer.style.RustStyleLoader
+import com.intellij.psi.util.PsiTreeUtil
+import org.rust.lang.core.psi.RsBlock
 import org.rust.lang.core.psi.RsFunction
 import org.rust.lang.core.psi.RsTraitItem
-import org.rust.lang.core.psi.ext.block
 
 class RustTraitDocGenerator(private val project: Project, private val element: RsTraitItem) :
     RustDocGenerator {
@@ -39,8 +40,8 @@ class RustTraitDocGenerator(private val project: Project, private val element: R
             body.children.filterIsInstance<RsFunction>()
         } ?: emptyList()
 
-        val requiredMethods = members.filter { it.block == null }
-        val providedMethods = members.filter { it.block != null }
+        val requiredMethods = members.filter { PsiTreeUtil.getChildOfType(it, RsBlock::class.java) == null }
+        val providedMethods = members.filter { PsiTreeUtil.getChildOfType(it, RsBlock::class.java) != null }
 
         if (requiredMethods.isNotEmpty()) {
             builder.appendEmptyDocLine()

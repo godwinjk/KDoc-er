@@ -3,8 +3,7 @@
     <name>RustDoc-er - Rust Doc Generator</name>
     <vendor email="godwinsona.k@gmail.com">Godwin Joseph</vendor>
 
-    <depends>com.intellij.modules.platform</depends>
-    <depends>com.jetbrains.rust</depends>
+    <depends>com.intellij.modules.rustrover</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <enterHandlerDelegate implementation="com.rustdocer.EnterAfterRustDocGenHandler" order="first"/>

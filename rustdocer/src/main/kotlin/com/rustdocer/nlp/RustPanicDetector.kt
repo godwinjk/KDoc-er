@@ -2,11 +2,10 @@ package com.rustdocer.nlp
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import org.rust.lang.core.psi.RsBlock
 import org.rust.lang.core.psi.RsFunction
 import org.rust.lang.core.psi.RsMacroCall
 import org.rust.lang.core.psi.RsMethodCallExpr
-import org.rust.lang.core.psi.ext.block
-import org.rust.lang.core.psi.ext.macroName
 
 /**
  * Scans a Rust function body for panic conditions: `panic!()`, `.unwrap()`,
@@ -20,13 +19,13 @@ object RustPanicDetector {
     private val PANIC_METHODS = setOf("unwrap", "expect")
 
     fun detect(function: RsFunction): List<PanicCondition> {
-        val body = function.block ?: return emptyList()
+        val body = PsiTreeUtil.getChildOfType(function, RsBlock::class.java) ?: return emptyList()
         val conditions = mutableListOf<PanicCondition>()
         val seen = mutableSetOf<String>()
 
         // Detect panic-inducing macro calls
         PsiTreeUtil.collectElementsOfType(body, RsMacroCall::class.java).forEach { macroCall ->
-            val name = macroCall.macroName
+            val name = macroCall.path.referenceName.orEmpty()
             if (name in PANIC_MACROS && seen.add(name)) {
                 conditions.add(panicConditionFor(name, macroCall))
             }

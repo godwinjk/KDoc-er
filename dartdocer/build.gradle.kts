@@ -7,7 +7,7 @@ val pluginVersion = "2026.1.1"
 val pluginSinceBuild = "251"
 val platformType = "IC"
 val platformVersion = "2025.2"
-val dartPluginVersion = "251.27812.12"
+val dartPluginVersion = "506.1.0"
 
 plugins {
     id("org.jetbrains.intellij.platform")

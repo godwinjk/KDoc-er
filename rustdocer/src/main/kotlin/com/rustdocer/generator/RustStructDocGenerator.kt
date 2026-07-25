@@ -9,9 +9,10 @@ import com.rustdocer.aspect.DeriveAspect
 import com.rustdocer.aspect.RustAspectEngine
 import com.rustdocer.nlp.RustSeeReferenceResolver
 import com.rustdocer.style.RustStyleLoader
+import com.intellij.psi.util.PsiTreeUtil
 import org.rust.lang.core.psi.RsNamedFieldDecl
 import org.rust.lang.core.psi.RsStructItem
-import org.rust.lang.core.psi.ext.RsVisibility
+import org.rust.lang.core.psi.RsVis
 
 class RustStructDocGenerator(private val project: Project, private val element: RsStructItem) :
     RustDocGenerator {
@@ -88,7 +89,7 @@ class RustStructDocGenerator(private val project: Project, private val element: 
     }
 
     private fun isPublicField(field: RsNamedFieldDecl): Boolean {
-        val vis = field.visibility
-        return vis is RsVisibility.Public
+        val visText = PsiTreeUtil.getChildOfType(field, RsVis::class.java)?.text?.trim()
+        return visText == "pub"
     }
 }

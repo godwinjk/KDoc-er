@@ -1,6 +1,7 @@
 package com.rustdocer.util
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 import com.rustdocer.service.RustDocerSettings
 import org.rust.lang.core.psi.RsConstant
 import org.rust.lang.core.psi.RsEnumItem
@@ -10,7 +11,7 @@ import org.rust.lang.core.psi.RsModItem
 import org.rust.lang.core.psi.RsStructItem
 import org.rust.lang.core.psi.RsTraitItem
 import org.rust.lang.core.psi.RsTypeAlias
-import org.rust.lang.core.psi.ext.RsVisibility
+import org.rust.lang.core.psi.RsVis
 import org.rust.lang.core.psi.ext.RsVisible
 
 object RustValidator {
@@ -41,18 +42,12 @@ object RustValidator {
     }
 
     private fun isVisibilityAllowed(element: RsVisible, settings: RustDocerSettings): Boolean {
-        val vis = element.visibility
+        val visText = PsiTreeUtil.getChildOfType(element as PsiElement, RsVis::class.java)?.text?.trim()
+            ?: return settings.isAllowedPrivate
         return when {
-            vis is RsVisibility.Public -> settings.isAllowedPub
-            vis is RsVisibility.Restricted -> {
-                val path = vis.inMod
-                when {
-                    path.text == "crate" || path.text.endsWith("crate") -> settings.isAllowedPubCrate
-                    path.text == "super" || path.text.endsWith("super") -> settings.isAllowedPubSuper
-                    else -> settings.isAllowedPubCrate
-                }
-            }
-            vis == RsVisibility.Private -> settings.isAllowedPrivate
+            visText == "pub" -> settings.isAllowedPub
+            visText.contains("super") -> settings.isAllowedPubSuper
+            visText.startsWith("pub(") -> settings.isAllowedPubCrate
             else -> settings.isAllowedPrivate
         }
     }
