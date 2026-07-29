@@ -25,7 +25,7 @@ dependencies {
     compileOnly("org.yaml:snakeyaml:2.2")
 
     intellijPlatform {
-        local("/Applications/RustRover.app")
+        create(platformType, platformVersion)
         bundledPlugin("com.jetbrains.rust")
         testFramework(TestFrameworkType.Platform)
     }
