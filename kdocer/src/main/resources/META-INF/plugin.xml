@@ -2,7 +2,7 @@
     <id>com.godwin.kdocer</id>
     <!-- name, version, description, change-notes and idea-version are injected by the build
          from gradle.properties, README.md and CHANGELOG.md (see build.gradle / patchPluginXml). -->
-    <vendor email="godwinjoseph.k@gmail.com">Godwin</vendor>
+    <vendor email="godwinjoseph.k@gmail.com">Godwin Joseph</vendor>
 
     <depends>com.intellij.modules.platform</depends>
     <depends config-file="withKotlin.xml">org.jetbrains.kotlin</depends>

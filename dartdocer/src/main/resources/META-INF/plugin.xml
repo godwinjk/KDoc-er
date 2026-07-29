@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.godwin.dartdocer</id>
     <name>DartDoc-er - Dart Doc Generator</name>
-    <vendor email="godwinsona.k@gmail.com">Godwin Joseph</vendor>
+    <vendor email="godwinjoseph.k@gmail.com">Godwin Joseph</vendor>
 
     <depends>com.intellij.modules.idea</depends>
     <depends>Dart</depends>
